@@ -1,4 +1,4 @@
-# Netlify — Next.js 15 (App Router)
+# Netlify — Next.js 15 (App Router + OpenNext runtime)
 [build]
   command = "npm run build"
   publish = ".next"
@@ -6,14 +6,8 @@
 [build.environment]
   NODE_VERSION = "22"
   NPM_FLAGS = "--no-fund --no-audit"
+  # Evita sorpresas si faltan vars en el build; se validan en runtime.
+  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Headers básicos de seguridad (el plugin Next gestiona las rutas SSR)
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
