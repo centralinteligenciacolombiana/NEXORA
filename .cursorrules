@@ -1,0 +1,56 @@
+# NEXORA - PWA para administración de conjuntos residenciales
+
+## Stack
+- Next.js 15 (App Router) + TypeScript estricto
+- Tailwind CSS (mobile-first)
+- PWA (manifest + service worker preparados)
+
+## Reglas de código
+
+### TypeScript
+- Usar TypeScript estricto en todo el proyecto (`strict: true`, `noUncheckedIndexedAccess`).
+- Definir tipos explícitos en `/src/types`. No usar `any`.
+- Roles del sistema: `ADMIN`, `RESIDENT`, `STAFF`, `SECURITY`.
+
+### Estilos y UI
+- Diseñar siempre **mobile-first** con Tailwind CSS.
+- Usar breakpoints: base (mobile) → `sm` → `md` → `lg` → `xl`.
+- Componentes pequeños y modulares en `/src/components`.
+- Reutilizar primitivos de `/src/components/ui` antes de crear nuevos.
+
+### Arquitectura
+```
+src/
+├── app/
+│   ├── (auth)/          # Login, registro
+│   └── (dashboard)/
+│       ├── admin/       # Panel administrador
+│       ├── resident/    # Panel propietarios/arrendatarios
+│       └── staff/       # Panel seguridad y trabajadores
+├── components/
+│   ├── ui/              # Primitivos (Button, Input, Card…)
+│   ├── shared/          # Lógica compartida entre paneles
+│   └── layout/          # Shell, nav, sidebar
+├── lib/                 # DB config, utils, helpers
+└── types/               # Definiciones TypeScript globales
+```
+
+### Convenciones
+- Server Components por defecto; `"use client"` solo cuando haga falta interactividad.
+- Importaciones con alias `@/` (ej: `@/components/ui/button`).
+- Nombres de archivos en kebab-case; componentes en PascalCase.
+- Un componente por archivo; props tipadas con interfaces.
+
+### PWA
+- Mantener `manifest.json` y service worker listos para activación futura.
+- Optimizar assets, lazy loading y offline-first donde aplique.
+
+### Base de datos (futuro)
+- Toda la lógica de acceso a datos vive en `/src/lib`.
+- No acoplar queries directamente en componentes de UI.
+- Preparar abstracciones para ORM/cliente (Prisma, Supabase, etc.).
+
+### Seguridad
+- Validar roles en middleware y en server actions.
+- Nunca exponer secretos en el cliente.
+- Sanitizar inputs del usuario.
