@@ -1,4 +1,4 @@
-# NEXORA
+﻿# NEXORA
 
 PWA para administrar conjuntos residenciales (Next.js 15 + Supabase + Tailwind).
 
