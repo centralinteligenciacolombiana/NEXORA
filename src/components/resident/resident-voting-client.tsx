@@ -106,7 +106,7 @@ function VoteForm({ poll }: { poll: ResidentPollCard }) {
               "flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 text-sm transition-colors",
               selected === o.id
                 ? "border-[var(--brand)] bg-[var(--brand-soft)]"
-                : "border-[var(--border)] bg-white hover:border-[var(--brand)]/30",
+                : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--brand)]/30",
             )}
           >
             <input
@@ -155,7 +155,7 @@ export function ResidentVotingClient({
 
   if (!hasUnit) {
     return (
-      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
         Necesitas una unidad asignada para participar en las votaciones.
       </p>
     );
@@ -163,7 +163,7 @@ export function ResidentVotingClient({
 
   if (polls.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
         <Vote className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
         <p className="mt-3 text-sm text-[var(--muted)]">
           No hay encuestas publicadas por ahora.
@@ -183,7 +183,7 @@ export function ResidentVotingClient({
             {active.map((poll) => (
               <li
                 key={poll.id}
-                className="rounded-2xl border border-[var(--brand)]/25 bg-white p-4 shadow-sm ring-1 ring-[var(--brand)]/10"
+                className="rounded-2xl border border-[var(--brand)]/25 bg-[var(--surface)] p-4 shadow-sm ring-1 ring-[var(--brand)]/10"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -231,7 +231,7 @@ export function ResidentVotingClient({
             {closed.map((poll) => (
               <li
                 key={poll.id}
-                className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

@@ -58,7 +58,7 @@ export function ResidentDeliveriesTabs({
           className={cn(
             "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             tab === "pending"
-              ? "bg-white text-amber-800 shadow-sm"
+              ? "bg-[var(--surface)] text-amber-800 shadow-sm"
               : "text-[var(--muted)]",
           )}
         >
@@ -71,7 +71,7 @@ export function ResidentDeliveriesTabs({
           className={cn(
             "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             tab === "delivered"
-              ? "bg-white text-emerald-800 shadow-sm"
+              ? "bg-[var(--surface)] text-emerald-800 shadow-sm"
               : "text-[var(--muted)]",
           )}
         >
@@ -81,7 +81,7 @@ export function ResidentDeliveriesTabs({
       </div>
 
       {list.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <Truck className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
           <p className="mt-3 text-sm text-[var(--muted)]">
             {tab === "pending"
@@ -98,7 +98,7 @@ export function ResidentDeliveriesTabs({
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-white text-amber-700">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-[var(--surface)] text-amber-700">
                     <Package className="size-5" aria-hidden />
                   </span>
                   <div>
@@ -119,7 +119,7 @@ export function ResidentDeliveriesTabs({
                 <Badge variant="warning">PENDING</Badge>
               </div>
 
-              <div className="mt-4 rounded-xl border border-amber-200 bg-white px-4 py-3 text-center">
+              <div className="mt-4 rounded-xl border border-amber-200 bg-[var(--surface)] px-4 py-3 text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-800">
                   PIN / código de retiro
                 </p>
@@ -134,7 +134,7 @@ export function ResidentDeliveriesTabs({
           ))}
         </ul>
       ) : (
-        <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-white/50 bg-white/75 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/65">
+        <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-white/50 bg-[var(--surface)]/90 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-[var(--surface)]/75">
           {list.map((d) => (
             <li key={d.id} className="px-4 py-3">
               <div className="flex items-start justify-between gap-3">

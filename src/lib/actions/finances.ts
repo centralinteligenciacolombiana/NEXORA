@@ -8,10 +8,9 @@ import {
 } from "@/lib/email/send";
 import {
   UTILITY_SERVICE_LABELS,
-  WEEKDAY_KEYS,
   formatCurrencyCOP,
+  normalizeTrashDays,
   type UtilityServiceType,
-  type WeekdayKey,
 } from "@/lib/community";
 
 export type FinanceActionState = {
@@ -119,9 +118,7 @@ export async function updateTrashScheduleAction(
   const trashTime = String(formData.get("trashTime") ?? "").trim();
   const trashNotes = String(formData.get("trashNotes") ?? "").trim();
   const selected = formData.getAll("trashDays").map(String);
-  const trashDays = selected.filter((d): d is WeekdayKey =>
-    (WEEKDAY_KEYS as readonly string[]).includes(d),
-  );
+  const trashDays = normalizeTrashDays(selected);
 
   const { error } = await auth.supabase
     .from("complexes")

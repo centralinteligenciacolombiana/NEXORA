@@ -38,7 +38,7 @@ const ROUNDED = {
 
 function resolveOverlay(overlay: OverlayTone | string | undefined): string {
   if (!overlay || overlay === "dark") return "bg-slate-900/60";
-  if (overlay === "light") return "bg-white/80";
+  if (overlay === "light") return "bg-[var(--surface)]/85";
   return overlay;
 }
 
@@ -50,7 +50,7 @@ function resolveBlur(blur: BackgroundPanelProps["blurEffect"]): string {
 
 /**
  * Panel con imagen(es) de fondo (Next/Image) + overlay WCAG-friendly,
- * o patrón mesh/puntos indigo si no hay imagen.
+ * o patrón mesh/puntos teal si no hay imagen.
  */
 export function BackgroundPanel({
   children,
@@ -131,9 +131,9 @@ export function GlassCard({
   return (
     <Tag
       className={cn(
-        "rounded-2xl border border-white/50 bg-white/75 shadow-sm ring-1 ring-black/5",
+        "rounded-2xl border border-[var(--border)]/80 bg-[var(--surface)]/90 shadow-sm ring-1 ring-black/5",
         blur === "lg" ? "backdrop-blur-lg" : "backdrop-blur-md",
-        "supports-[backdrop-filter]:bg-white/65",
+        "supports-[backdrop-filter]:bg-[var(--surface)]/75",
         GLASS_PAD[padding],
         className,
       )}

@@ -26,7 +26,7 @@ export default async function CompleteComplexPage() {
   }
 
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm sm:p-8">
+    <div className="rounded-2xl border border-black/5 bg-[var(--surface)] p-6 shadow-sm sm:p-8">
       <h2 className="font-display text-2xl font-semibold">Completar conjunto</h2>
       <p className="mt-1 text-sm text-[var(--muted)]">
         Tu cuenta ya está lista. Define los datos del conjunto residencial.

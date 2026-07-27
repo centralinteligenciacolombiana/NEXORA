@@ -138,7 +138,7 @@ export default async function ResidentDashboardPage() {
         imageAlt=""
       >
         <header className="space-y-1">
-          <p className="nexora-text-on-dark text-sm font-medium text-indigo-100">
+          <p className="nexora-text-on-dark text-sm font-medium text-teal-50">
             {complex.name}
             {complex.city ? ` · ${complex.city}` : ""}
           </p>
@@ -175,7 +175,7 @@ export default async function ResidentDashboardPage() {
             <span className="block text-sm font-semibold">
               Generar Pase QR de Visita
             </span>
-            <span className="block text-xs text-indigo-100">
+            <span className="block text-xs text-emerald-50">
               Autoriza el ingreso de tus visitas
             </span>
           </span>
@@ -183,10 +183,10 @@ export default async function ResidentDashboardPage() {
 
         <Link
           href="/dashboard/resident/deliveries"
-          className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)]/80 bg-white/70 px-4 py-3 transition-colors hover:border-[var(--brand)]/30"
+          className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)]/80 bg-[var(--surface)]/80 px-4 py-3 transition-colors hover:border-[var(--brand)]/30"
         >
           <span className="flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-white text-[var(--emerald)]">
+            <span className="flex size-10 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--emerald)]">
               <Package className="size-5" aria-hidden />
             </span>
             <span>
@@ -208,10 +208,10 @@ export default async function ResidentDashboardPage() {
 
         <Link
           href="/dashboard/resident/finances"
-          className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)]/80 bg-white/70 px-4 py-3 transition-colors hover:border-[var(--brand)]/30"
+          className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)]/80 bg-[var(--surface)]/80 px-4 py-3 transition-colors hover:border-[var(--brand)]/30"
         >
           <span className="flex items-center gap-3">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-white text-[var(--brand)]">
+            <span className="flex size-10 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--brand)]">
               <Wallet className="size-5" aria-hidden />
             </span>
             <span>
@@ -234,21 +234,21 @@ export default async function ResidentDashboardPage() {
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
           <Link
             href="/dashboard/resident/pqrs"
-            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-white/70 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
+            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-[var(--surface)]/80 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
           >
             <MessageSquareWarning className="size-5 text-[var(--brand)]" aria-hidden />
             <span className="text-sm font-semibold">PQRS</span>
           </Link>
           <Link
             href="/dashboard/resident/projects"
-            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-white/70 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
+            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-[var(--surface)]/80 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
           >
             <FolderKanban className="size-5 text-[var(--brand)]" aria-hidden />
             <span className="text-sm font-semibold">Proyectos</span>
           </Link>
           <Link
             href="/dashboard/resident/voting"
-            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-white/70 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
+            className="flex flex-col gap-2 rounded-xl border border-[var(--border)]/80 bg-[var(--surface)]/80 px-3 py-3 transition-colors hover:border-[var(--brand)]/30"
           >
             <Vote className="size-5 text-[var(--brand)]" aria-hidden />
             <span className="text-sm font-semibold">Votaciones</span>

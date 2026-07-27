@@ -53,7 +53,7 @@ export function Switch({
       >
         <span
           className={cn(
-            "pointer-events-none inline-block size-5 rounded-full bg-white shadow transition-transform",
+            "pointer-events-none inline-block size-5 rounded-full bg-[var(--surface)] shadow transition-transform",
             checked ? "translate-x-5" : "translate-x-0.5",
           )}
         />

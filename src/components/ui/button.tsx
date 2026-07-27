@@ -10,7 +10,7 @@ const variantStyles = {
   primary:
     "bg-[var(--brand)] text-white hover:bg-[var(--brand-hover)] focus:ring-[var(--brand)]",
   secondary:
-    "border border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--slate-100)]",
+    "border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--slate-100)]",
   outline:
     "border border-[var(--brand)]/30 bg-transparent text-[var(--brand)] hover:bg-[var(--brand-soft)]",
   ghost: "text-[var(--muted)] hover:bg-[var(--slate-100)] hover:text-[var(--foreground)]",

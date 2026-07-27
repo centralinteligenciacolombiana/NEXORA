@@ -118,7 +118,7 @@ export default async function AdminInvitesPage({
       <div className="space-y-3 md:hidden">
         <h2 className="text-sm font-semibold">Invitaciones creadas</h2>
         {(invites ?? []).length === 0 ? (
-          <p className="rounded-xl border border-dashed border-black/10 bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-black/10 bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             Aún no hay invitaciones. Genera la primera arriba.
           </p>
         ) : (
@@ -129,7 +129,7 @@ export default async function AdminInvitesPage({
             return (
               <article
                 key={invite.id}
-                className="rounded-xl border border-black/5 bg-white p-4"
+                className="rounded-xl border border-black/5 bg-[var(--surface)] p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -174,7 +174,7 @@ export default async function AdminInvitesPage({
         )}
       </div>
 
-      <div className="hidden overflow-hidden rounded-xl border border-black/5 bg-white md:block">
+      <div className="hidden overflow-hidden rounded-xl border border-black/5 bg-[var(--surface)] md:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="border-b border-black/5 bg-[var(--background)] text-xs uppercase tracking-wide text-[var(--muted)]">

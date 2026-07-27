@@ -62,7 +62,7 @@ function DeliverBillModal({
       role="dialog"
       aria-modal="true"
     >
-      <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl bg-[var(--surface)] p-5 shadow-xl">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold">Entregar recibo</h2>
@@ -162,7 +162,7 @@ export function SecurityUtilitiesClient({
       <form
         ref={formRef}
         action={regAction}
-        className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+        className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
       >
         <div className="flex items-center gap-2">
           <FileText className="size-4 text-[var(--brand)]" aria-hidden />
@@ -230,12 +230,12 @@ export function SecurityUtilitiesClient({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar por apto…"
-            className="h-12 w-full rounded-xl border border-[var(--border)] bg-white py-2 pl-10 pr-3 text-base outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
+            className="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-2 pl-10 pr-3 text-base outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
           />
         </div>
 
         {filtered.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             No hay recibos pendientes.
           </p>
         ) : (
@@ -243,7 +243,7 @@ export function SecurityUtilitiesClient({
             {filtered.map((b) => (
               <li
                 key={b.id}
-                className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

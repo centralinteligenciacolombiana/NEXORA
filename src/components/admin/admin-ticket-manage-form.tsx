@@ -42,7 +42,7 @@ export function AdminTicketManageForm({
   return (
     <form
       action={formAction}
-      className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+      className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
     >
       <div className="flex items-center gap-2">
         <Wrench className="size-4 text-[var(--brand)]" aria-hidden />

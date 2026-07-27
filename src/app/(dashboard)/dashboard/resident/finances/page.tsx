@@ -113,7 +113,7 @@ export default async function ResidentFinancesPage() {
       </div>
 
       {!profile.unit_id ? (
-        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
           No tienes una unidad asignada. Contacta a la administración.
         </p>
       ) : (

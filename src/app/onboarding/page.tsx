@@ -43,7 +43,7 @@ export default async function OnboardingPage() {
       <div className="mt-8 flex flex-col gap-3">
         <Link
           href="/register/complex/complete"
-          className="rounded-xl border border-black/10 bg-white px-5 py-4 transition-colors hover:border-[var(--brand)]"
+          className="rounded-xl border border-black/10 bg-[var(--surface)] px-5 py-4 transition-colors hover:border-[var(--brand)]"
         >
           <span className="block font-semibold text-[var(--foreground)]">
             Soy administrador
@@ -53,7 +53,7 @@ export default async function OnboardingPage() {
           </span>
         </Link>
 
-        <div className="rounded-xl border border-dashed border-black/15 bg-white/60 px-5 py-4">
+        <div className="rounded-xl border border-dashed border-black/15 bg-[var(--surface)]/70 px-5 py-4">
           <span className="block font-semibold text-[var(--foreground)]">
             Soy residente o personal
           </span>

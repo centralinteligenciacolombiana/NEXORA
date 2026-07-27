@@ -24,7 +24,10 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/lib/actions/auth";
+import { AppAtmosphere } from "@/components/layout/app-atmosphere";
 import { MobileBottomBar } from "@/components/layout/mobile-bottom-bar";
+import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
+import { getShellBackground } from "@/lib/dashboard-backgrounds";
 import type { UserRole } from "@/types";
 
 interface DashboardShellProps {
@@ -140,6 +143,60 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
   ],
 };
 
+const RESIDENT_TABS = [
+  {
+    href: "/dashboard/resident",
+    label: "Inicio",
+    icon: Home,
+    exact: true,
+  },
+  {
+    href: "/dashboard/resident/visits",
+    label: "Visitas",
+    icon: QrCode,
+    exact: false,
+  },
+  {
+    href: "/dashboard/resident/deliveries",
+    label: "Paquetes",
+    icon: Package,
+    exact: false,
+  },
+  {
+    href: "/dashboard/resident/profile",
+    label: "Perfil",
+    icon: UserRound,
+    exact: false,
+  },
+] as const;
+
+const SECURITY_TABS = [
+  {
+    href: "/dashboard/security",
+    label: "Portería",
+    icon: Shield,
+    exact: true,
+  },
+  {
+    href: "/dashboard/security/deliveries",
+    label: "Paquetes",
+    icon: Package,
+    exact: false,
+  },
+  {
+    href: "/dashboard/security/utilities",
+    label: "Recibos",
+    icon: FileText,
+    exact: false,
+  },
+  {
+    href: "/dashboard/security/logbook",
+    label: "Bitácora",
+    icon: BookOpen,
+    exact: false,
+  },
+] as const;
+
 export function DashboardShell({
   children,
   role,
@@ -152,12 +209,18 @@ export function DashboardShell({
   const items = role && !awaitingApproval ? NAV_BY_ROLE[role] : [];
   const homeHref = items[0]?.href ?? "/";
   const isResident = role === "RESIDENT" && !awaitingApproval;
+  const isSecurity = role === "SECURITY" && !awaitingApproval;
+  const showBottomBar = isResident || isSecurity;
+  const showMobileDrawer = !awaitingApproval && items.length > 0;
+  const bgImage = getShellBackground(role);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--background)]">
-      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16 sm:px-6">
-          <div className="min-w-0">
+    <div className="relative flex min-h-dvh flex-col">
+      <AppAtmosphere imageSrc={bgImage} />
+
+      <header className="sticky top-0 z-30 border-b border-[var(--border)]/80 bg-[var(--surface)]/85 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:h-16 sm:px-6">
+          <div className="min-w-0 flex-1">
             <Link
               href={awaitingApproval ? "/dashboard/pending-approval" : homeHref}
               className="font-display text-lg font-semibold tracking-wide text-[var(--brand)]"
@@ -170,7 +233,9 @@ export function DashboardShell({
               </p>
             )}
           </div>
-          <nav className="hidden items-center gap-1 sm:flex">
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-1 lg:flex">
             {items.map((item) => {
               const Icon = item.icon;
               const active = item.exact
@@ -182,7 +247,7 @@ export function DashboardShell({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     active
                       ? "bg-[var(--brand-soft)] text-[var(--brand)]"
                       : "text-[var(--muted)] hover:bg-[var(--slate-100)] hover:text-[var(--foreground)]",
@@ -196,26 +261,53 @@ export function DashboardShell({
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--slate-100)] hover:text-[var(--foreground)]"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--slate-100)] hover:text-[var(--foreground)]"
               >
                 <LogOut className="size-4" aria-hidden />
                 Salir
               </button>
             </form>
           </nav>
+
+          {/* Mobile / tablet: menú (Salir va dentro del drawer) */}
+          <div className="flex items-center gap-2 lg:hidden">
+            {showMobileDrawer ? (
+              <MobileNavDrawer
+                items={items}
+                homeHref={homeHref}
+                complexName={complexName}
+              />
+            ) : (
+              <form action={logoutAction}>
+                <button
+                  type="submit"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/95 px-3 text-sm font-semibold text-[var(--foreground)] shadow-sm"
+                  aria-label="Salir"
+                >
+                  <LogOut className="size-4 shrink-0" aria-hidden />
+                  <span>Salir</span>
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </header>
 
       <main
         className={cn(
-          "mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8",
-          isResident && "pb-24 sm:pb-8",
+          "relative z-10 mx-auto w-full max-w-7xl flex-1 px-3 py-5 sm:px-6 sm:py-8",
+          showBottomBar && "pb-24 sm:pb-8",
         )}
       >
         {children}
       </main>
 
-      {isResident && <MobileBottomBar />}
+      {isResident && (
+        <MobileBottomBar items={RESIDENT_TABS} ariaLabel="Navegación residente" />
+      )}
+      {isSecurity && (
+        <MobileBottomBar items={SECURITY_TABS} ariaLabel="Navegación seguridad" />
+      )}
     </div>
   );
 }

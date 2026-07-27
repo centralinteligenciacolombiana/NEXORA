@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getAppUrl } from "@/lib/app-url";
 import { ROLE_DASHBOARD, type UserRole } from "@/types";
 import { getEmailConfirmationMessage } from "@/lib/email/send-verification";
 import { createAdminClient, findAuthUserIdByEmail, forceConfirmAuthEmail, hasServiceRole } from "@/lib/supabase/admin";
@@ -250,7 +251,7 @@ export async function registerComplexAction(
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
+      emailRedirectTo: `${getAppUrl()}/auth/confirm`,
       data: {
         full_name: fullName,
         phone,

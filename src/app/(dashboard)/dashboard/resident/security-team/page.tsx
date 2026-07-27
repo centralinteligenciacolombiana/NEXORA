@@ -105,7 +105,7 @@ export default async function ResidentSecurityTeamPage() {
       </div>
 
       {team.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center text-sm text-[var(--muted)]">
           No hay turnos de seguridad activos en este momento.
         </p>
       ) : (
@@ -146,7 +146,7 @@ function GuardSection({
         {title}
       </h2>
       {guards.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-6 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-6 text-center text-sm text-[var(--muted)]">
           {empty}
         </p>
       ) : (
@@ -154,7 +154,7 @@ function GuardSection({
           {guards.map((g) => (
             <li
               key={g.shiftId}
-              className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+              className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
             >
               {g.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element

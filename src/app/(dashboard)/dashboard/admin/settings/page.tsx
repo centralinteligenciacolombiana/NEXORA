@@ -80,7 +80,7 @@ export default async function AdminSettingsPage() {
 
       <Link
         href="/dashboard/admin/settings/security"
-        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
+        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
       >
         <span className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-lg bg-[var(--brand-soft)] text-[var(--brand)]">
@@ -100,7 +100,7 @@ export default async function AdminSettingsPage() {
 
       <Link
         href="/dashboard/admin/settings/community"
-        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
+        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
       >
         <span className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-lg bg-amber-50 text-amber-800">
@@ -120,7 +120,7 @@ export default async function AdminSettingsPage() {
 
       <Link
         href="/dashboard/admin/finances"
-        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
+        className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 shadow-sm transition-colors hover:border-[var(--brand)]/30"
       >
         <span className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-800">
@@ -163,7 +163,7 @@ export default async function AdminSettingsPage() {
         </div>
         <AddUnitForm towers={towers} />
         {(units ?? []).length > 0 && (
-          <ul className="divide-y divide-black/5 overflow-hidden rounded-xl border border-black/5 bg-white">
+          <ul className="divide-y divide-black/5 overflow-hidden rounded-xl border border-black/5 bg-[var(--surface)]">
             {(units ?? []).map((unit) => (
               <li
                 key={unit.id}
@@ -194,7 +194,7 @@ export default async function AdminSettingsPage() {
         </div>
         <AddAmenityForm />
         {(amenities ?? []).length > 0 && (
-          <ul className="divide-y divide-black/5 overflow-hidden rounded-xl border border-black/5 bg-white">
+          <ul className="divide-y divide-black/5 overflow-hidden rounded-xl border border-black/5 bg-[var(--surface)]">
             {(amenities ?? []).map((amenity) => (
               <li
                 key={amenity.id}

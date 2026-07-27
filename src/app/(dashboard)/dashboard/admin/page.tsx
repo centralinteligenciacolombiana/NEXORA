@@ -98,7 +98,7 @@ export default async function AdminDashboardPage() {
         carouselIntervalMs={7500}
         contentClassName="p-5 sm:p-7"
       >
-        <p className="nexora-text-on-dark text-sm font-medium text-indigo-100">
+        <p className="nexora-text-on-dark text-sm font-medium text-teal-50">
           Panel de administración
         </p>
         <h1 className="nexora-text-on-dark mt-1 font-display text-2xl font-semibold text-white sm:text-3xl">

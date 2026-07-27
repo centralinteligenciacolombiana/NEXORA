@@ -70,7 +70,7 @@ export function ResidentProfileForm({ profile }: { profile: ResidentProfileView 
         </div>
       )}
 
-      <section className="rounded-2xl border border-[var(--border)] bg-white p-5 shadow-sm">
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
           <div className="relative">
             {profile.avatarUrl ? (
@@ -123,7 +123,7 @@ export function ResidentProfileForm({ profile }: { profile: ResidentProfileView 
         </div>
       </section>
 
-      <dl className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+      <dl className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
         {[
           { label: "Conjunto", value: profile.complexName },
           { label: "Unidad", value: profile.unitLabel },
@@ -151,7 +151,7 @@ export function ResidentProfileForm({ profile }: { profile: ResidentProfileView 
 
       <form
         action={updateAction}
-        className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5"
+        className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5"
       >
         <h2 className="font-semibold">Actualizar mis datos</h2>
         <Input

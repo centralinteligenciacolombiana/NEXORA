@@ -37,7 +37,7 @@ export function InviteRegisterForm({
   if (state.success && state.message) {
     return (
       <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-center">
-        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-white text-emerald-700">
+        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[var(--surface)] text-emerald-700">
           <MailCheck className="size-6" aria-hidden />
         </div>
         <h3 className="mt-3 font-display text-lg font-semibold text-emerald-950">

@@ -60,7 +60,7 @@ export function InstallPwaBanner() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-20 z-50 mx-auto w-[min(100%-1.5rem,28rem)] rounded-2xl border border-[var(--border)] bg-white p-3 shadow-lg sm:bottom-6"
+      className="fixed inset-x-0 bottom-20 z-50 mx-auto w-[min(100%-1.5rem,28rem)] rounded-2xl border border-[var(--border)] bg-[var(--surface)]/95 p-3 shadow-lg backdrop-blur-md sm:bottom-6"
       role="dialog"
       aria-label="Instalar NEXORA"
     >

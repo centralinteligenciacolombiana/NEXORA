@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  /* NEXORA — Indigo / Emerald / Slate */
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --brand: #4f46e5;
-  --brand-hover: #4338ca;
-  --brand-soft: #eef2ff;
-  --emerald: #059669;
+  /* NEXORA — verde claro elegante + superficies suaves */
+  --background: #eef5f1;
+  --foreground: #14241f;
+  --brand: #3eb489;
+  --brand-hover: #2f9a74;
+  --brand-soft: #e3f5ee;
+  --emerald: #34d399;
   --emerald-soft: #ecfdf5;
-  --danger: #dc2626;
-  --danger-soft: #fef2f2;
-  --surface: #ffffff;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --slate-900: #0f172a;
-  --slate-700: #334155;
-  --slate-500: #64748b;
-  --slate-100: #f1f5f9;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+  --surface: #f6faf8;
+  --muted: #5f736b;
+  --border: #c8d9d1;
+  --slate-900: #14241f;
+  --slate-700: #2d3f38;
+  --slate-500: #5f736b;
+  --slate-100: #e5f0ea;
 }
 
 @theme inline {
@@ -41,7 +41,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), system-ui, sans-serif;
-  /* Evita scroll horizontal en móviles / PWA standalone */
   overflow-x: clip;
 }
 
@@ -49,26 +48,25 @@ body {
   font-family: var(--font-display), Georgia, serif;
 }
 
-/* Patrón sutil indigo (#4F46E5) — mesh + puntos cuando no hay foto de fondo */
 .nexora-bg-pattern {
-  background-color: #eef2ff;
+  background-color: #e2efe8;
   background-image:
     radial-gradient(
-      ellipse 80% 60% at 10% 20%,
-      rgb(79 70 229 / 0.22),
+      ellipse 80% 60% at 12% 18%,
+      rgb(62 180 137 / 0.22),
       transparent 55%
     ),
     radial-gradient(
-      ellipse 70% 50% at 90% 10%,
-      rgb(67 56 202 / 0.18),
+      ellipse 70% 50% at 88% 12%,
+      rgb(52 211 153 / 0.14),
       transparent 50%
     ),
     radial-gradient(
-      ellipse 60% 40% at 70% 90%,
-      rgb(99 102 241 / 0.14),
+      ellipse 55% 40% at 70% 88%,
+      rgb(47 154 116 / 0.12),
       transparent 45%
     ),
-    radial-gradient(rgb(79 70 229 / 0.12) 1px, transparent 1px);
+    radial-gradient(rgb(62 180 137 / 0.12) 1px, transparent 1px);
   background-size:
     auto,
     auto,
@@ -77,5 +75,5 @@ body {
 }
 
 .nexora-text-on-dark {
-  text-shadow: 0 1px 2px rgb(15 23 42 / 0.45);
+  text-shadow: 0 1px 2px rgb(20 36 31 / 0.45);
 }

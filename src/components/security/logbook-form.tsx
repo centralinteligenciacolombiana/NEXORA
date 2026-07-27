@@ -30,7 +30,7 @@ export function LogbookForm({ hasActiveShift }: LogbookFormProps) {
     <form
       ref={formRef}
       action={formAction}
-      className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+      className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
     >
       <div className="flex items-center gap-2">
         <NotebookPen className="size-4 text-[var(--brand)]" aria-hidden />
@@ -66,7 +66,7 @@ export function LogbookForm({ hasActiveShift }: LogbookFormProps) {
           rows={4}
           maxLength={2000}
           placeholder="Describe la novedad para el compañero que entra de relevo…"
-          className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
+          className="w-full rounded-lg border border-black/10 bg-[var(--surface)] px-3 py-2 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
         />
       </div>
 

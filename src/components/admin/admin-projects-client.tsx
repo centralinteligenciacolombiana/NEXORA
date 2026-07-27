@@ -75,7 +75,7 @@ export function AdminProjectsClient({
       <form
         key={editing?.id ?? "new"}
         action={formAction}
-        className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5"
+        className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5"
       >
         <div className="flex items-center gap-2">
           <FolderKanban className="size-4 text-[var(--brand)]" aria-hidden />
@@ -191,7 +191,7 @@ export function AdminProjectsClient({
       <section className="space-y-3">
         <h2 className="font-semibold">Portafolio ({projects.length})</h2>
         {projects.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             Aún no hay proyectos publicados.
           </p>
         ) : (
@@ -199,7 +199,7 @@ export function AdminProjectsClient({
             {projects.map((p) => (
               <li
                 key={p.id}
-                className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-sm"
+                className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm"
               >
                 {p.cover_image_url && (
                   // eslint-disable-next-line @next/next/no-img-element

@@ -49,7 +49,7 @@ function DeliverConfirmModal({
       aria-modal="true"
       aria-labelledby="deliver-modal-title"
     >
-      <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
+      <div className="w-full max-w-md rounded-2xl bg-[var(--surface)] p-5 shadow-xl">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 id="deliver-modal-title" className="text-lg font-semibold">
@@ -161,12 +161,12 @@ export function SecurityDeliveriesClient({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar por apto, torre o mensajería…"
-          className="h-12 w-full rounded-xl border border-[var(--border)] bg-white py-2 pl-10 pr-3 text-base outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
+          className="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-2 pl-10 pr-3 text-base outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
         />
       </div>
 
       {filtered.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
           No hay paquetes pendientes
           {query ? " para esa búsqueda" : ""}.
         </p>
@@ -175,7 +175,7 @@ export function SecurityDeliveriesClient({
           {filtered.map((d) => (
             <li
               key={d.id}
-              className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">

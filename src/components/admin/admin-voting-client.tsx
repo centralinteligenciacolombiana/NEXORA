@@ -124,7 +124,7 @@ export function AdminVotingClient({ polls: initialPolls }: AdminVotingClientProp
     <div className="space-y-6">
       <form
         action={formAction}
-        className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5"
+        className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5"
       >
         <div className="flex items-center gap-2">
           <Vote className="size-4 text-[var(--brand)]" aria-hidden />
@@ -190,7 +190,7 @@ export function AdminVotingClient({ polls: initialPolls }: AdminVotingClientProp
       <section className="space-y-3">
         <h2 className="font-semibold">Encuestas</h2>
         {polls.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             No hay votaciones todavía.
           </p>
         ) : (
@@ -201,7 +201,7 @@ export function AdminVotingClient({ polls: initialPolls }: AdminVotingClientProp
                 <li
                   key={poll.id}
                   className={cn(
-                    "rounded-2xl border bg-white p-4 shadow-sm",
+                    "rounded-2xl border bg-[var(--surface)] p-4 shadow-sm",
                     open
                       ? "border-[var(--brand)]/30"
                       : "border-[var(--border)]",

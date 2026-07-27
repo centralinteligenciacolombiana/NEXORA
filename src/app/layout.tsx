@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
 import { RegisterServiceWorker } from "@/components/pwa/register-service-worker";
 import { InstallPwaBanner } from "@/components/pwa/install-pwa-banner";
+import { getAppUrl } from "@/lib/app-url";
 import "./globals.css";
 
 const display = Fraunces({
@@ -17,12 +18,7 @@ const body = Source_Sans_3({
 
 const APP_URL = (() => {
   try {
-    return new URL(
-      (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(
-        /\/$/,
-        "",
-      ),
-    );
+    return new URL(getAppUrl());
   } catch {
     return new URL("http://localhost:3000");
   }
@@ -61,8 +57,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#4f46e5" },
-    { media: "(prefers-color-scheme: dark)", color: "#4f46e5" },
+    { media: "(prefers-color-scheme: light)", color: "#3eb489" },
+    { media: "(prefers-color-scheme: dark)", color: "#3eb489" },
   ],
   width: "device-width",
   initialScale: 1,

@@ -29,7 +29,7 @@ export function Select({
       <select
         id={selectId}
         className={cn(
-          "h-10 w-full rounded-lg border border-black/10 bg-white px-3 text-sm transition-colors focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20",
+          "h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-sm transition-colors focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20",
           error && "border-red-500",
           className,
         )}

@@ -112,7 +112,7 @@ export default async function ResidentPqrsDetailPage({ params }: PageProps) {
         Mis solicitudes
       </Link>
 
-      <div className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5">
         <p className="font-mono text-sm text-[var(--brand)]">{ticket.radicado}</p>
         <h1 className="mt-1 font-display text-2xl font-semibold">{ticket.title}</h1>
         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -213,7 +213,7 @@ export default async function ResidentPqrsDetailPage({ params }: PageProps) {
           ))}
       </div>
 
-      <section className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5">
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5">
         <h2 className="mb-4 font-semibold">Historial de seguimiento</h2>
         <PqrsTimeline updates={updates} />
       </section>

@@ -39,7 +39,7 @@ export function PanicButton() {
         "rounded-2xl border p-4 sm:p-5",
         confirming
           ? "border-red-300 bg-[var(--danger-soft)]"
-          : "border-red-100 bg-white",
+          : "border-red-100 bg-[var(--surface)]",
       )}
     >
       <div className="flex items-start gap-3">
@@ -68,7 +68,7 @@ export function PanicButton() {
         </Button>
       ) : (
         <form action={formAction} className="mt-4 space-y-3">
-          <p className="rounded-xl bg-white/80 px-3 py-2 text-center text-sm font-medium text-red-800">
+          <p className="rounded-xl bg-[var(--surface)]/85 px-3 py-2 text-center text-sm font-medium text-red-800">
             ¿Confirmas enviar la alerta a portería ahora?
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -92,7 +92,7 @@ export function PanicButton() {
       )}
 
       {state.error && (
-        <p className="mt-3 rounded-lg bg-white px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="mt-3 rounded-lg bg-[var(--surface)] px-3 py-2 text-sm text-red-700" role="alert">
           {state.error}
         </p>
       )}

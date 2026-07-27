@@ -41,7 +41,7 @@ export function InviteQrCard({
   }
 
   return (
-    <div className="rounded-xl border border-black/5 bg-white p-4 sm:p-5">
+    <div className="rounded-xl border border-black/5 bg-[var(--surface)] p-4 sm:p-5">
       <p className="text-sm font-semibold text-[var(--foreground)]">{title}</p>
       <p className="mt-1 text-xs text-[var(--muted)]">
         Escanea para registrarte o imprime el QR en carteleras de la
@@ -50,7 +50,7 @@ export function InviteQrCard({
 
       <div
         ref={canvasWrapRef}
-        className="mx-auto mt-4 flex w-fit rounded-xl border border-black/5 bg-white p-3"
+        className="mx-auto mt-4 flex w-fit rounded-xl border border-black/5 bg-[var(--surface)] p-3"
       >
         <QRCodeCanvas
           value={url}
@@ -58,7 +58,7 @@ export function InviteQrCard({
           level="M"
           includeMargin
           bgColor="#ffffff"
-          fgColor="#0d4f3c"
+          fgColor="#2f9a74"
         />
       </div>
 

@@ -21,6 +21,8 @@ export const WEEKDAY_LABELS: Record<WeekdayKey, string> = {
   SUNDAY: "Domingo",
 };
 
+const WEEKDAY_SET = new Set<string>(WEEKDAY_KEYS);
+
 /** getDay() JS: 0=domingo … 6=sábado → clave trash_days */
 const JS_DAY_TO_KEY: WeekdayKey[] = [
   "SUNDAY",
@@ -32,42 +34,75 @@ const JS_DAY_TO_KEY: WeekdayKey[] = [
   "SATURDAY",
 ];
 
-export function weekdayKeyFromDate(date: Date): WeekdayKey {
-  return JS_DAY_TO_KEY[date.getDay()] ?? "MONDAY";
+/** Día de la semana en America/Bogota (calendario Colombia). */
+export function weekdayKeyInBogota(now = new Date()): WeekdayKey {
+  const weekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Bogota",
+    weekday: "short",
+  }).format(now);
+  const map: Record<string, WeekdayKey> = {
+    Sun: "SUNDAY",
+    Mon: "MONDAY",
+    Tue: "TUESDAY",
+    Wed: "WEDNESDAY",
+    Thu: "THURSDAY",
+    Fri: "FRIDAY",
+    Sat: "SATURDAY",
+  };
+  return map[weekday] ?? JS_DAY_TO_KEY[now.getDay()] ?? "MONDAY";
 }
 
-export type TrashReminderKind = "today" | "tomorrow" | null;
+export function weekdayKeyFromDate(date: Date): WeekdayKey {
+  return weekdayKeyInBogota(date);
+}
 
+/** Normaliza trash_days desde DB (array, string CSV, etc.). */
+export function normalizeTrashDays(
+  trashDays: string[] | string | null | undefined,
+): WeekdayKey[] {
+  let raw: string[] = [];
+  if (Array.isArray(trashDays)) {
+    raw = trashDays;
+  } else if (typeof trashDays === "string" && trashDays.trim()) {
+    raw = trashDays.split(/[,|;]+/);
+  }
+
+  const out: WeekdayKey[] = [];
+  for (const item of raw) {
+    const key = item.trim().toUpperCase();
+    if (WEEKDAY_SET.has(key) && !out.includes(key as WeekdayKey)) {
+      out.push(key as WeekdayKey);
+    }
+  }
+  return out;
+}
+
+export type TrashReminderKind = "today";
+
+/**
+ * Aviso de basura: solo el día configurado por el admin (hora Colombia).
+ * No muestra anticipación de “mañana” para no cubrir casi toda la semana.
+ */
 export function getTrashReminder(
-  trashDays: string[] | null | undefined,
+  trashDays: string[] | string | null | undefined,
   trashTime: string | null | undefined,
   now = new Date(),
 ): { kind: TrashReminderKind; message: string } | null {
-  const days = (trashDays ?? []).map((d) => d.toUpperCase());
+  const days = normalizeTrashDays(trashDays);
   if (days.length === 0) return null;
 
-  const todayKey = weekdayKeyFromDate(now);
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowKey = weekdayKeyFromDate(tomorrow);
+  const todayKey = weekdayKeyInBogota(now);
+  if (!days.includes(todayKey)) {
+    return null;
+  }
 
   const timePart = trashTime?.trim() ? ` a las ${trashTime.trim()}` : "";
+  const dayLabel = WEEKDAY_LABELS[todayKey];
 
-  if (days.includes(todayKey)) {
-    return {
-      kind: "today",
-      message: `Hoy pasa la basura${timePart || ""}`,
-    };
-  }
-
-  if (days.includes(tomorrowKey)) {
-    return {
-      kind: "tomorrow",
-      message: `Mañana pasa la basura${timePart || ""}`,
-    };
-  }
-
-  return null;
+  return {
+    kind: "today",
+    message: `Hoy (${dayLabel}) pasa la basura${timePart}`,
+  };
 }
 
 export type UtilityServiceType =

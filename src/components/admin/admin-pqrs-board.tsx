@@ -53,7 +53,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
             onClick={() => setView("kanban")}
             className={cn(
               "rounded-lg px-3 py-2 text-xs font-medium",
-              view === "kanban" ? "bg-white shadow-sm" : "text-[var(--muted)]",
+              view === "kanban" ? "bg-[var(--surface)] shadow-sm" : "text-[var(--muted)]",
             )}
           >
             Kanban
@@ -63,7 +63,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
             onClick={() => setView("list")}
             className={cn(
               "rounded-lg px-3 py-2 text-xs font-medium",
-              view === "list" ? "bg-white shadow-sm" : "text-[var(--muted)]",
+              view === "list" ? "bg-[var(--surface)] shadow-sm" : "text-[var(--muted)]",
             )}
           >
             Lista
@@ -75,7 +75,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+          className="h-10 rounded-lg border border-black/10 bg-[var(--surface)] px-3 text-sm"
         >
           <option value="ALL">Todos los estados</option>
           {KANBAN_COLUMNS.map((s) => (
@@ -87,7 +87,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+          className="h-10 rounded-lg border border-black/10 bg-[var(--surface)] px-3 text-sm"
         >
           <option value="ALL">Todas las prioridades</option>
           {(Object.keys(PRIORITY_LABELS) as MaintenancePriority[]).map((p) => (
@@ -99,7 +99,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+          className="h-10 rounded-lg border border-black/10 bg-[var(--surface)] px-3 text-sm"
         >
           <option value="ALL">Todos los tipos</option>
           {(Object.keys(TICKET_TYPE_LABELS) as MaintenanceTicketType[]).map(
@@ -113,7 +113,7 @@ export function AdminPqrsBoard({ tickets }: AdminPqrsBoardProps) {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
           No hay tickets con esos filtros.
         </p>
       ) : view === "list" ? (
@@ -160,7 +160,7 @@ function TicketCard({
       <Link
         href={`/dashboard/admin/pqrs/${t.id}`}
         className={cn(
-          "block rounded-xl border border-[var(--border)] bg-white p-3 shadow-sm transition-colors hover:border-[var(--brand)]/30",
+          "block rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 shadow-sm transition-colors hover:border-[var(--brand)]/30",
           compact && "p-2.5",
         )}
       >

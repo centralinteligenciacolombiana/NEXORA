@@ -56,7 +56,7 @@ export function ResidentProjectsGallery({
             className={cn(
               "rounded-lg px-2 py-2.5 text-center text-xs font-medium transition-colors sm:text-sm",
               tab === key
-                ? "bg-white text-[var(--foreground)] shadow-sm"
+                ? "bg-[var(--surface)] text-[var(--foreground)] shadow-sm"
                 : "text-[var(--muted)]",
             )}
           >
@@ -69,7 +69,7 @@ export function ResidentProjectsGallery({
       </div>
 
       {list.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <FolderKanban className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
           <p className="mt-3 text-sm text-[var(--muted)]">
             No hay proyectos en «{PROJECT_STATUS_LABELS[tab]}».
@@ -80,7 +80,7 @@ export function ResidentProjectsGallery({
           {list.map((p) => (
             <li
               key={p.id}
-              className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-sm"
+              className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm"
             >
               {p.cover_image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element

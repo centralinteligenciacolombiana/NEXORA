@@ -50,14 +50,14 @@ export default async function ResidentReservationsPage() {
       </div>
 
       {(reservations ?? []).length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <CalendarDays className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
           <p className="mt-3 text-sm text-[var(--muted)]">
             No tienes reservas activas. Pronto podrás reservar salón, BBQ y más.
           </p>
         </div>
       ) : (
-        <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+        <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
           {(reservations ?? []).map((r) => {
             const amenity = Array.isArray(r.amenities)
               ? r.amenities[0]

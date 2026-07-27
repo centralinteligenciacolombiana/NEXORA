@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getAppUrl } from "@/lib/app-url";
 import { createClient } from "@/lib/supabase/server";
-import type { UserRole } from "@/types";
 
 export type InviteActionState = {
   error?: string;
@@ -13,18 +13,32 @@ export type InviteActionState = {
   message?: string;
 };
 
-const ALLOWED_INVITE_ROLES: UserRole[] = ["RESIDENT", "SECURITY", "STAFF"];
+type InviteRole = "RESIDENT" | "SECURITY" | "STAFF";
+
+const ALLOWED_INVITE_ROLES: InviteRole[] = ["RESIDENT", "SECURITY", "STAFF"];
+
+const DEFAULT_LABEL: Record<InviteRole, string> = {
+  RESIDENT: "Registro de residentes",
+  SECURITY: "Registro de seguridad",
+  STAFF: "Registro de mantenimiento",
+};
+
+function isInviteRole(role: string): role is InviteRole {
+  return ALLOWED_INVITE_ROLES.includes(role as InviteRole);
+}
 
 export async function createInviteAction(
   _prev: InviteActionState,
   formData: FormData,
 ): Promise<InviteActionState> {
-  const role = String(formData.get("role") ?? "RESIDENT") as UserRole;
+  const roleRaw = String(formData.get("role") ?? "RESIDENT");
   const label = String(formData.get("label") ?? "").trim();
 
-  if (!ALLOWED_INVITE_ROLES.includes(role)) {
-    return { error: "Rol de invitación no permitido." };
+  if (!isInviteRole(roleRaw)) {
+    return { error: "Rol de invitacion no permitido." };
   }
+
+  const role: InviteRole = roleRaw;
 
   const supabase = await createClient();
   const {
@@ -32,7 +46,7 @@ export async function createInviteAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Debes iniciar sesión." };
+    return { error: "Debes iniciar sesion." };
   }
 
   const { data: profile } = await supabase
@@ -52,12 +66,12 @@ export async function createInviteAction(
     .maybeSingle();
 
   if (!complex?.name) {
-    return { error: "No se encontró el conjunto actual." };
+    return { error: "No se encontro el conjunto actual." };
   }
 
   const { data, error } = await supabase.rpc("create_complex_invite", {
     p_role: role,
-    p_label: label || `Registro abierto — ${complex.name}`,
+    p_label: label || `${DEFAULT_LABEL[role]} - ${complex.name}`,
     p_max_uses: null,
     p_expires_at: null,
     p_unit_id: null,
@@ -74,13 +88,20 @@ export async function createInviteAction(
       : undefined;
 
   if (!token) {
-    return { error: "No se pudo generar el token de invitación." };
+    return { error: "No se pudo generar el token de invitacion." };
   }
 
-  const base = (
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  ).replace(/\/$/, "");
-  const inviteUrl = `${base}/register/invite/${token}`;
+  const inviteUrl = `${getAppUrl()}/register/invite/${token}`;
+
+  if (
+    process.env.NODE_ENV === "production" &&
+    /localhost|127\.0\.0\.1/i.test(inviteUrl)
+  ) {
+    return {
+      error:
+        "URL de produccion no configurada. Define NEXT_PUBLIC_APP_URL en Netlify.",
+    };
+  }
 
   revalidatePath("/dashboard/admin/invites");
   revalidatePath("/dashboard/admin/approvals");
@@ -97,7 +118,7 @@ export async function createInviteAction(
     token,
     url: inviteUrl,
     emailSent: false,
-    message: `Enlace de ${roleLabel} listo. Compártelo o imprime el QR.`,
+    message: `Enlace de ${roleLabel} listo. Compartelo o imprime el QR.`,
   };
 }
 
@@ -111,7 +132,7 @@ export async function deleteInviteAction(
   inviteId: string,
 ): Promise<DeleteInviteState> {
   if (!inviteId) {
-    return { error: "Invitación no válida." };
+    return { error: "Invitacion no valida." };
   }
 
   const supabase = await createClient();
@@ -120,7 +141,7 @@ export async function deleteInviteAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Debes iniciar sesión." };
+    return { error: "Debes iniciar sesion." };
   }
 
   const { data: profile } = await supabase
@@ -144,7 +165,7 @@ export async function deleteInviteAction(
   }
 
   if (!invite || invite.complex_id !== profile.complex_id) {
-    return { error: "Invitación no encontrada." };
+    return { error: "Invitacion no encontrada." };
   }
 
   const { error } = await supabase
@@ -160,7 +181,7 @@ export async function deleteInviteAction(
   revalidatePath("/dashboard/admin/invites");
   return {
     success: true,
-    message: "Invitación eliminada. El enlace ya no funciona.",
+    message: "Invitacion eliminada. El enlace ya no funciona.",
   };
 }
 
@@ -205,6 +226,6 @@ export async function rejectRegistrationAction(
   revalidatePath("/dashboard/pending-approval");
   return {
     success: true,
-    message: "Registro rechazado. El usuario no tendrá acceso al panel.",
+    message: "Registro rechazado. El usuario no tendra acceso al panel.",
   };
 }

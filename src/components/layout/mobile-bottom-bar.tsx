@@ -2,47 +2,35 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Package, QrCode, UserRound } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ITEMS = [
-  {
-    href: "/dashboard/resident",
-    label: "Inicio",
-    icon: Home,
-    exact: true,
-  },
-  {
-    href: "/dashboard/resident/visits",
-    label: "Visitas",
-    icon: QrCode,
-    exact: false,
-  },
-  {
-    href: "/dashboard/resident/deliveries",
-    label: "Paquetes",
-    icon: Package,
-    exact: false,
-  },
-  {
-    href: "/dashboard/resident/profile",
-    label: "Perfil",
-    icon: UserRound,
-    exact: false,
-  },
-] as const;
+export type BottomTabItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  exact?: boolean;
+};
 
-export function MobileBottomBar() {
+interface MobileBottomBarProps {
+  items: readonly BottomTabItem[];
+  ariaLabel?: string;
+}
+
+export function MobileBottomBar({
+  items,
+  ariaLabel = "Navegación principal",
+}: MobileBottomBarProps) {
   const pathname = usePathname();
 
   return (
     <nav
-      aria-label="Navegación residente"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-white/95 backdrop-blur-md sm:hidden"
+      aria-label={ariaLabel}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-md sm:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <ul className="mx-auto flex h-16 max-w-lg items-stretch">
-        {ITEMS.map((item) => {
+      <ul className="mx-auto flex min-h-16 max-w-lg items-stretch">
+        {items.map((item) => {
           const Icon = item.icon;
           const active = item.exact
             ? pathname === item.href
@@ -53,7 +41,7 @@ export function MobileBottomBar() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex h-full flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors",
+                  "flex h-full min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-medium transition-colors",
                   active
                     ? "text-[var(--brand)]"
                     : "text-[var(--slate-500)] hover:text-[var(--slate-700)]",
@@ -63,7 +51,7 @@ export function MobileBottomBar() {
                   className={cn("size-5", active && "stroke-[2.25px]")}
                   aria-hidden
                 />
-                {item.label}
+                <span className="truncate">{item.label}</span>
               </Link>
             </li>
           );

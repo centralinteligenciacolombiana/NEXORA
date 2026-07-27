@@ -46,7 +46,7 @@ export function ComplexSettingsForm({ initial }: ComplexSettingsFormProps) {
   );
 
   return (
-    <form action={action} className="space-y-4 rounded-xl border border-black/5 bg-white p-4 sm:p-5">
+    <form action={action} className="space-y-4 rounded-xl border border-black/5 bg-[var(--surface)] p-4 sm:p-5">
       <div>
         <h2 className="font-semibold">Datos del conjunto</h2>
         <p className="text-sm text-[var(--muted)]">
@@ -81,7 +81,7 @@ export function ComplexSettingsForm({ initial }: ComplexSettingsFormProps) {
             rows={3}
             defaultValue={initial.towers}
             placeholder={"Torre A\nTorre B\nBloque 1"}
-            className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20"
+            className="w-full rounded-lg border border-black/10 bg-[var(--surface)] px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20"
           />
           <p className="mt-1 text-xs text-[var(--muted)]">
             Una por línea (o separadas por coma).
@@ -93,7 +93,7 @@ export function ComplexSettingsForm({ initial }: ComplexSettingsFormProps) {
             name="description"
             rows={3}
             defaultValue={initial.description}
-            className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20"
+            className="w-full rounded-lg border border-black/10 bg-[var(--surface)] px-3 py-2 text-sm focus:border-[var(--brand)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/20"
           />
         </div>
       </div>
@@ -116,7 +116,7 @@ export function AddUnitForm({ towers }: AddUnitFormProps) {
   );
 
   return (
-    <form action={action} className="space-y-3 rounded-xl border border-black/5 bg-white p-4 sm:p-5">
+    <form action={action} className="space-y-3 rounded-xl border border-black/5 bg-[var(--surface)] p-4 sm:p-5">
       <div>
         <h2 className="font-semibold">Agregar unidad</h2>
         <p className="text-sm text-[var(--muted)]">
@@ -130,7 +130,7 @@ export function AddUnitForm({ towers }: AddUnitFormProps) {
             <label className="text-sm font-medium">Torre</label>
             <select
               name="tower"
-              className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+              className="h-10 rounded-lg border border-black/10 bg-[var(--surface)] px-3 text-sm"
               defaultValue=""
             >
               <option value="">Sin torre</option>
@@ -161,7 +161,7 @@ export function AddAmenityForm() {
   );
 
   return (
-    <form action={action} className="space-y-3 rounded-xl border border-black/5 bg-white p-4 sm:p-5">
+    <form action={action} className="space-y-3 rounded-xl border border-black/5 bg-[var(--surface)] p-4 sm:p-5">
       <div>
         <h2 className="font-semibold">Agregar zona común</h2>
         <p className="text-sm text-[var(--muted)]">

@@ -14,7 +14,8 @@ interface BackgroundMediaProps {
 }
 
 /**
- * Carrusel de fondo con crossfade. Una sola imagen = estático.
+ * Carrusel de fondo con crossfade.
+ * Solo monta la slide activa y la siguiente (ahorro de red/memoria).
  */
 export function BackgroundMedia({
   images,
@@ -36,17 +37,22 @@ export function BackgroundMedia({
 
   if (slides.length === 0) return null;
 
+  const nextIndex = slides.length > 1 ? (index + 1) % slides.length : index;
+  const visible = new Set([index, nextIndex]);
+
   return (
     <div className={cn("absolute inset-0 z-0", className)} aria-hidden>
       {slides.map((src, i) => {
+        if (!visible.has(i)) return null;
         const active = i === index;
         return (
           <Image
-            key={src}
+            key={`${src}-${i}`}
             src={src}
             alt={imageAlt}
             fill
-            priority={priority && i === 0}
+            priority={priority && i === index}
+            quality={65}
             sizes="100vw"
             className={cn(
               "object-cover transition-opacity duration-1000 ease-in-out",

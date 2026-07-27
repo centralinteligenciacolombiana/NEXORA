@@ -41,7 +41,7 @@ const INVALID_INVITE_MESSAGE =
 
 function InviteError({ message }: { message?: string }) {
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-6 text-center shadow-sm sm:p-10">
+    <div className="rounded-2xl border border-black/5 bg-[var(--surface)] p-6 text-center shadow-sm sm:p-10">
       <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-red-50 text-red-600">
         <AlertCircle className="size-6" aria-hidden />
       </div>
@@ -83,7 +83,7 @@ export default async function InviteRegisterPage({ params }: InvitePageProps) {
   const lockedEmail = preview.invite.email ?? null;
 
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm sm:p-8">
+    <div className="rounded-2xl border border-black/5 bg-[var(--surface)] p-5 shadow-sm sm:p-8">
       <div className="flex items-start gap-4">
         <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-black/5 bg-[var(--background)]">
           {logoUrl ? (

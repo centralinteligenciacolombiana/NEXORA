@@ -75,7 +75,7 @@ export function AdminSecuritySettingsClient({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5">
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5">
         <Switch
           id="enable-shift-logbook"
           checked={enabled}
@@ -96,7 +96,7 @@ export function AdminSecuritySettingsClient({
         </div>
 
         {guards.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             No hay usuarios con rol SECURITY. Invita personal desde Invitaciones.
           </p>
         ) : (
@@ -104,7 +104,7 @@ export function AdminSecuritySettingsClient({
             {guards.map((g) => (
               <li
                 key={g.id}
-                className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
               >
                 <div className="flex items-start gap-3">
                   {g.avatar_url ? (

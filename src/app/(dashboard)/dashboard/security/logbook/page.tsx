@@ -55,7 +55,7 @@ export default async function SecurityLogbookPage() {
           <ArrowLeft className="size-4" aria-hidden />
           Volver a portería
         </Link>
-        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <Lock className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
           <h1 className="mt-3 font-display text-xl font-semibold">
             Bitácora desactivada
@@ -168,7 +168,7 @@ export default async function SecurityLogbookPage() {
         </h2>
 
         {(logs ?? []).length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
             Aún no hay novedades en las últimas 48 horas.
           </p>
         ) : (

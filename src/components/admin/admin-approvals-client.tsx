@@ -30,7 +30,7 @@ export function AdminApprovalsClient({
 
   if (rows.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center text-sm text-[var(--muted)]">
+      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center text-sm text-[var(--muted)]">
         No hay registros pendientes de confirmación.
       </p>
     );
@@ -41,7 +41,7 @@ export function AdminApprovalsClient({
       {rows.map((row) => (
         <li
           key={row.id}
-          className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
         >
           <div className="flex items-start gap-3">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-soft)] text-[var(--brand)]">

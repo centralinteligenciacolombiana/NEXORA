@@ -39,8 +39,8 @@ export function RecentActivityPanel({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/80 shadow-sm backdrop-blur-sm">
-          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-white/50 px-4 py-3">
+        <div className="overflow-hidden rounded-2xl border border-white/40 bg-[var(--surface)]/85 shadow-sm backdrop-blur-sm">
+          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-[var(--surface)]/60 px-4 py-3">
             <Users className="size-4 text-[var(--brand)]" aria-hidden />
             <h3 className="font-semibold">Visitantes</h3>
           </div>
@@ -77,8 +77,8 @@ export function RecentActivityPanel({
           )}
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/80 shadow-sm backdrop-blur-sm">
-          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-white/50 px-4 py-3">
+        <div className="overflow-hidden rounded-2xl border border-white/40 bg-[var(--surface)]/85 shadow-sm backdrop-blur-sm">
+          <div className="flex items-center gap-2 border-b border-[var(--border)] bg-[var(--surface)]/60 px-4 py-3">
             <Package className="size-4 text-[var(--emerald)]" aria-hidden />
             <h3 className="font-semibold">Encomiendas</h3>
           </div>

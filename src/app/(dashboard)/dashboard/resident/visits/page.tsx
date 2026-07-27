@@ -73,7 +73,7 @@ export default async function ResidentVisitsPage() {
       {profile.unit_id ? (
         <CreateVisitorPassForm />
       ) : (
-        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
           Necesitas una unidad asignada para autorizar visitas.
         </p>
       )}
@@ -84,11 +84,11 @@ export default async function ResidentVisitsPage() {
           <h2 className="font-semibold">Mis autorizaciones</h2>
         </div>
         {(visitors ?? []).length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             Aún no has registrado visitantes.
           </p>
         ) : (
-          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
             {(visitors ?? []).map((v) => {
               const accessType = (v.access_type ?? "TODAY") as VisitorAccessType;
               const status = v.status as VisitorStatus;
@@ -140,11 +140,11 @@ export default async function ResidentVisitsPage() {
           <h2 className="font-semibold">Encomiendas pendientes</h2>
         </div>
         {(deliveries ?? []).length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             No hay paquetes pendientes en portería.
           </p>
         ) : (
-          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
             {(deliveries ?? []).map((d) => (
               <li
                 key={d.id}

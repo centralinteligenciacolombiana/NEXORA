@@ -30,7 +30,7 @@ export function TrashScheduleForm({
   const selected = new Set(initialDays.map((d) => d.toUpperCase()));
 
   return (
-    <form action={formAction} className="space-y-4 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5">
+    <form action={formAction} className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5">
       <div className="flex items-center gap-2">
         <Trash2 className="size-4 text-[var(--brand)]" aria-hidden />
         <h2 className="font-semibold">Recolección de basura</h2>
@@ -46,7 +46,7 @@ export function TrashScheduleForm({
                 "flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors",
                 selected.has(day)
                   ? "border-[var(--brand)]/40 bg-[var(--brand-soft)]"
-                  : "border-[var(--border)] bg-white",
+                  : "border-[var(--border)] bg-[var(--surface)]",
               )}
             >
               <input
@@ -79,7 +79,7 @@ export function TrashScheduleForm({
           rows={3}
           defaultValue={initialNotes}
           placeholder="Sacar bolsas la noche anterior, separar reciclaje…"
-          className="w-full rounded-lg border border-black/10 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
+          className="w-full rounded-lg border border-black/10 bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20"
         />
       </div>
 

@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getAppUrl } from "@/lib/app-url";
 import { ROLE_DASHBOARD, type UserRole } from "@/types";
 
 /** Rutas base por rol de usuario */
@@ -64,8 +65,5 @@ export function inviteStatus(invite: {
 }
 
 export function buildInviteUrl(token: string): string {
-  const base = (
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  ).replace(/\/$/, "");
-  return `${base}/register/invite/${token}`;
+  return `${getAppUrl()}/register/invite/${token}`;
 }

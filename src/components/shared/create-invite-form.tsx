@@ -84,7 +84,7 @@ export function CreateInviteForm() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-black/5 bg-white p-4 sm:p-5">
+      <div className="rounded-xl border border-black/5 bg-[var(--surface)] p-4 sm:p-5">
         <div className="flex items-start gap-3">
           <div className="mt-0.5 rounded-lg bg-[var(--brand)]/10 p-2 text-[var(--brand)]">
             <Plus className="size-4" aria-hidden />

@@ -165,7 +165,7 @@ export default async function SecurityDashboardPage() {
           </Link>
           <Link
             href="/dashboard/security/deliveries"
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-4 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--surface)] px-4 text-sm font-semibold text-slate-900 hover:bg-slate-100"
           >
             Entregar paquetes
           </Link>

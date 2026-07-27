@@ -32,7 +32,7 @@ export function CreatePqrsForm() {
   return (
     <form
       action={formAction}
-      className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5"
+      className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5"
     >
       <div className="flex items-center gap-2">
         <MessageSquarePlus className="size-4 text-[var(--brand)]" aria-hidden />

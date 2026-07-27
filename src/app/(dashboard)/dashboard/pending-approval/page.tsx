@@ -54,7 +54,7 @@ export default async function PendingApprovalPage() {
 
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-lg flex-col justify-center px-4 py-10">
-      <div className="rounded-2xl border border-[var(--border)] bg-white p-6 text-center shadow-sm sm:p-8">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 text-center shadow-sm sm:p-8">
         <div
           className={`mx-auto flex size-14 items-center justify-center rounded-2xl ${
             rejected

@@ -68,7 +68,7 @@ export function ResidentFinancesClient({
           className={cn(
             "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             tab === "admin"
-              ? "bg-white text-[var(--brand)] shadow-sm"
+              ? "bg-[var(--surface)] text-[var(--brand)] shadow-sm"
               : "text-[var(--muted)]",
           )}
         >
@@ -81,7 +81,7 @@ export function ResidentFinancesClient({
           className={cn(
             "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             tab === "utilities"
-              ? "bg-white text-amber-800 shadow-sm"
+              ? "bg-[var(--surface)] text-amber-800 shadow-sm"
               : "text-[var(--muted)]",
           )}
         >
@@ -112,7 +112,7 @@ function AdminFeeSection({ fee }: { fee: ResidentFeeCard | null }) {
 
   if (!fee) {
     return (
-      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+      <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
         No hay cuota de administración publicada para este mes.
       </p>
     );
@@ -133,7 +133,7 @@ function AdminFeeSection({ fee }: { fee: ResidentFeeCard | null }) {
         : "Pendiente de pago";
 
   return (
-    <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5">
+    <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-[var(--muted)]">Cuota de administración</p>
@@ -235,7 +235,7 @@ function UtilitiesSection({
   return (
     <div className="space-y-4">
       {pending.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+        <p className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
           No tienes recibos pendientes en portería.
         </p>
       ) : (
@@ -259,7 +259,7 @@ function UtilitiesSection({
                 </div>
                 <Badge variant="warning">PENDING</Badge>
               </div>
-              <div className="mt-3 rounded-xl border border-amber-200 bg-white px-4 py-3 text-center">
+              <div className="mt-3 rounded-xl border border-amber-200 bg-[var(--surface)] px-4 py-3 text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-800">
                   PIN de retiro
                 </p>
@@ -277,7 +277,7 @@ function UtilitiesSection({
           <h3 className="text-sm font-semibold text-[var(--slate-700)]">
             Historial
           </h3>
-          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-white">
+          <ul className="divide-y divide-[var(--border)] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)]">
             {history.map((b) => (
               <li key={b.id} className="flex items-center justify-between px-4 py-3 text-sm">
                 <span>

@@ -87,7 +87,7 @@ export function AdminFinancesClient({
     <div className="space-y-8">
       <form
         action={publishAction}
-        className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm sm:p-5"
+        className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm sm:p-5"
       >
         <div className="flex items-center gap-2">
           <Wallet className="size-4 text-[var(--brand)]" aria-hidden />
@@ -150,7 +150,7 @@ export function AdminFinancesClient({
       <section className="space-y-3">
         <h2 className="font-semibold">Avisos publicados</h2>
         {notices.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             Aún no hay cuotas publicadas.
           </p>
         ) : (
@@ -158,7 +158,7 @@ export function AdminFinancesClient({
             {notices.map((n) => (
               <li
                 key={n.id}
-                className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
@@ -193,7 +193,7 @@ export function AdminFinancesClient({
       <section className="space-y-3">
         <h2 className="font-semibold">Comprobantes por verificar</h2>
         {proofs.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-8 text-center text-sm text-[var(--muted)]">
+          <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)]">
             No hay comprobantes pendientes.
           </p>
         ) : (
@@ -201,7 +201,7 @@ export function AdminFinancesClient({
             {proofs.map((p) => (
               <li
                 key={p.id}
-                className="rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

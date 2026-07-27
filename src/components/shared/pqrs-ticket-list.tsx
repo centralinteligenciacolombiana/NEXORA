@@ -36,7 +36,7 @@ export function PqrsTicketList({
 }: PqrsTicketListProps) {
   if (tickets.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--border)] bg-white px-4 py-10 text-center text-sm text-[var(--muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
         {emptyMessage}
       </p>
     );
@@ -48,7 +48,7 @@ export function PqrsTicketList({
         <li key={t.id}>
           <Link
             href={`${hrefBase}/${t.id}`}
-            className="block rounded-2xl border border-[var(--border)] bg-white p-4 shadow-sm transition-colors hover:border-[var(--brand)]/30"
+            className="block rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm transition-colors hover:border-[var(--brand)]/30"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">

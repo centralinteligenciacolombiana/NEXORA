@@ -35,7 +35,7 @@ export default async function ResidentDeliveriesPage() {
           <ArrowLeft className="size-4" aria-hidden />
           Volver al inicio
         </Link>
-        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <Package className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
           <p className="mt-3 text-sm text-[var(--muted)]">
             No tienes una unidad asignada. Contacta a la administración.

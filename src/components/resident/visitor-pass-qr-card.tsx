@@ -106,7 +106,7 @@ export function VisitorPassQrCard({ pass }: VisitorPassQrCardProps) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-[var(--border)] bg-white p-4 sm:p-5">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
             <h1 className="font-display text-2xl font-semibold">
@@ -152,7 +152,7 @@ export function VisitorPassQrCard({ pass }: VisitorPassQrCardProps) {
           <>
             <div
               ref={canvasWrapRef}
-              className="mx-auto mt-5 flex w-fit rounded-xl border border-black/5 bg-white p-3"
+              className="mx-auto mt-5 flex w-fit rounded-xl border border-black/5 bg-[var(--surface)] p-3"
             >
               <QRCodeCanvas
                 value={pass.qrCode}
@@ -160,7 +160,7 @@ export function VisitorPassQrCard({ pass }: VisitorPassQrCardProps) {
                 level="M"
                 includeMargin
                 bgColor="#ffffff"
-                fgColor="#0d4f3c"
+                fgColor="#2f9a74"
               />
             </div>
             <p className="mt-2 text-center text-xs text-[var(--muted)]">
@@ -184,7 +184,7 @@ export function VisitorPassQrCard({ pass }: VisitorPassQrCardProps) {
         )}
       </div>
 
-      <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-white p-4 sm:p-5">
+      <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
         <h2 className="font-semibold">Renovar autorización</h2>
         <p className="text-sm text-[var(--muted)]">
           Al renovar se genera un QR nuevo; el anterior deja de servir.

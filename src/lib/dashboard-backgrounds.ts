@@ -1,32 +1,32 @@
 /**
  * Fondos locales en /public/images/backgrounds/
- * Nombres reales del proyecto (PNG).
+ * Preferimos WebP optimizados (~90–215KB) frente a PNG de 2MB+.
  */
+
+import type { UserRole } from "@/types";
 
 export type DashboardPanelKey = "landing" | "resident" | "security" | "admin";
 
 const LOCAL_SETS: Record<DashboardPanelKey, string[]> = {
-  // Portada pública (/)
   landing: [
-    "/images/backgrounds/hero-resident.png",
-    "/images/backgrounds/hero-resident-02.png",
-    "/images/backgrounds/hero-resident-03.png",
+    "/images/backgrounds/optimized/hero-resident.webp",
+    "/images/backgrounds/optimized/hero-resident-02.webp",
+    "/images/backgrounds/optimized/hero-resident-03.webp",
   ],
-  // Dashboard residente
   resident: [
-    "/images/backgrounds/hero-resident.png",
-    "/images/backgrounds/hero-resident-02.png",
-    "/images/backgrounds/hero-resident-03.png",
+    "/images/backgrounds/optimized/hero-resident.webp",
+    "/images/backgrounds/optimized/hero-resident-02.webp",
+    "/images/backgrounds/optimized/hero-resident-03.webp",
   ],
   security: [
-    "/images/backgrounds/security-bg-01.png",
-    "/images/backgrounds/security-bg-02.png",
-    "/images/backgrounds/security-bg-03.png",
+    "/images/backgrounds/optimized/security-bg-01.webp",
+    "/images/backgrounds/optimized/security-bg-02.webp",
+    "/images/backgrounds/optimized/security-bg-03.webp",
   ],
   admin: [
-    "/images/backgrounds/admin-bg-01.png",
-    "/images/backgrounds/admin-bg-02.png",
-    "/images/backgrounds/admin-bg-03.png",
+    "/images/backgrounds/optimized/admin-bg-01.webp",
+    "/images/backgrounds/optimized/admin-bg-02.webp",
+    "/images/backgrounds/optimized/admin-bg-03.webp",
   ],
 };
 
@@ -55,4 +55,28 @@ export function getDashboardBackgrounds(
   return LOCAL_SETS[panel];
 }
 
+/** Imagen fija de atmósfera para el shell (toda la app autenticada). */
+export function getShellBackground(role?: UserRole | null): string {
+  if (role === "SECURITY") {
+    return (
+      LOCAL_SETS.security[0] ??
+      "/images/backgrounds/optimized/security-bg-01.webp"
+    );
+  }
+  if (role === "ADMIN") {
+    return (
+      LOCAL_SETS.admin[0] ?? "/images/backgrounds/optimized/admin-bg-01.webp"
+    );
+  }
+  return (
+    LOCAL_SETS.landing[0] ??
+    "/images/backgrounds/optimized/hero-resident.webp"
+  );
+}
+
 export const LOCAL_BACKGROUND_SETS = LOCAL_SETS;
+
+/** Portada fija para login / registro */
+export const APP_AUTH_BACKGROUND =
+  LOCAL_SETS.landing[0] ??
+  "/images/backgrounds/optimized/hero-resident.webp";
