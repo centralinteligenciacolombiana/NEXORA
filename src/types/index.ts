@@ -107,6 +107,23 @@ export interface VisitorPass {
   updatedAt: string;
 }
 
+/** Tipo de vehículo autorizado */
+export type VehicleType = "CAR" | "MOTORCYCLE";
+
+/** Vehículo autorizado por unidad */
+export interface AuthorizedVehicle {
+  id: string;
+  complexId: string;
+  unitId: string;
+  plate: string;
+  vehicleType: VehicleType;
+  color?: string | null;
+  photoUrl?: string | null;
+  notes?: string | null;
+  isActive: boolean;
+  createdAt: string;
+}
+
 /** Payload público de get_invite_by_token */
 export interface InvitePreview {
   valid: boolean;

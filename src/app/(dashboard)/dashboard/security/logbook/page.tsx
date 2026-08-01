@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import {
   ArrowLeft,
   BookOpen,
+  Handshake,
   ImageIcon,
   Lock,
   Moon,
@@ -12,9 +13,21 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { getSignedStorageUrl } from "@/lib/supabase/storage";
 import { LogbookForm } from "@/components/security/logbook-form";
+import { ShiftClockControls } from "@/components/security/shift-clock-controls";
 import { GlassCard } from "@/components/ui/background-panel";
 import { Badge } from "@/components/ui/badge";
 import { formatDateTime } from "@/lib/utils";
+import type { ShiftType } from "@/lib/actions/shifts";
+
+type LogRow = {
+  id: string;
+  title: string;
+  description: string;
+  evidence_url: string | null;
+  created_at: string;
+  author_guard_id: string;
+  evidence_signed?: string | null;
+};
 
 export default async function SecurityLogbookPage() {
   const supabase = await createClient();
@@ -69,12 +82,13 @@ export default async function SecurityLogbookPage() {
     );
   }
 
-  const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+  // 7 días: un fin de semana no debe ocultar el último relevo
+  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   const [{ data: myShift }, { data: logs }] = await Promise.all([
     supabase
       .from("guard_shifts")
-      .select("id, shift_type")
+      .select("id, shift_type, started_at")
       .eq("guard_id", user.id)
       .eq("status", "ACTIVE")
       .maybeSingle(),
@@ -111,7 +125,7 @@ export default async function SecurityLogbookPage() {
     }
   }
 
-  const logsWithEvidence = await Promise.all(
+  const logsWithEvidence: LogRow[] = await Promise.all(
     (logs ?? []).map(async (log) => ({
       ...log,
       evidence_signed: await getSignedStorageUrl(
@@ -120,6 +134,12 @@ export default async function SecurityLogbookPage() {
       ),
     })),
   );
+
+  // Última novedad de OTRO guardia = lo que debes leer al entrar de relevo
+  const previousHandover =
+    logsWithEvidence.find((l) => l.author_guard_id !== user.id) ?? null;
+
+  const activeShiftType = (myShift?.shift_type as ShiftType | undefined) ?? null;
 
   return (
     <div className="mx-auto max-w-lg space-y-5 sm:max-w-2xl">
@@ -140,25 +160,54 @@ export default async function SecurityLogbookPage() {
             Bitácora de relevos
           </h1>
           <p className="mt-1 text-sm text-[var(--muted)]">
-            Novedades de las últimas 48 horas · {complex.name}
+            Novedades de los últimos 7 días · {complex.name}
           </p>
           {myShift && (
             <div className="mt-2">
               {myShift.shift_type === "DAY" ? (
                 <Badge variant="warning">
                   <Sun className="mr-1 size-3" aria-hidden />
-                  Tu turno: Día
+                  Tu turno: Día · desde {formatDateTime(myShift.started_at)}
                 </Badge>
               ) : (
                 <Badge variant="muted">
                   <Moon className="mr-1 size-3" aria-hidden />
-                  Tu turno: Noche
+                  Tu turno: Noche · desde {formatDateTime(myShift.started_at)}
                 </Badge>
               )}
             </div>
           )}
         </div>
       </div>
+
+      <ShiftClockControls
+        activeShiftType={activeShiftType}
+        canSelfManage={profile.role === "SECURITY"}
+      />
+
+      {previousHandover && (
+        <GlassCard
+          as="section"
+          padding="md"
+          className="border-[var(--brand)]/30 bg-[var(--brand-soft)]/40"
+        >
+          <div className="mb-2 flex items-center gap-2 text-[var(--brand)]">
+            <Handshake className="size-4" aria-hidden />
+            <h2 className="text-sm font-semibold">Último relevo (leer primero)</h2>
+          </div>
+          <p className="font-semibold text-[var(--foreground)]">
+            {previousHandover.title}
+          </p>
+          <p className="mt-0.5 text-xs text-[var(--muted)]">
+            {authorById.get(previousHandover.author_guard_id)?.full_name ||
+              "Compañero"}{" "}
+            · {formatDateTime(previousHandover.created_at)}
+          </p>
+          <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--slate-700)]">
+            {previousHandover.description}
+          </p>
+        </GlassCard>
+      )}
 
       <LogbookForm hasActiveShift={Boolean(myShift)} />
 
@@ -167,9 +216,9 @@ export default async function SecurityLogbookPage() {
           Feed reciente
         </h2>
 
-        {(logs ?? []).length === 0 ? (
+        {logsWithEvidence.length === 0 ? (
           <p className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-10 text-center text-sm text-[var(--muted)]">
-            Aún no hay novedades en las últimas 48 horas.
+            Aún no hay novedades en los últimos 7 días.
           </p>
         ) : (
           <ul className="space-y-3">
@@ -178,54 +227,55 @@ export default async function SecurityLogbookPage() {
               return (
                 <li key={log.id}>
                   <GlassCard as="article" padding="md">
-                  <div className="flex items-start gap-3">
-                    {author?.avatar_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={author.avatar_url}
-                        alt=""
-                        className="size-10 rounded-full object-cover"
-                      />
-                    ) : (
-                      <span className="flex size-10 items-center justify-center rounded-full bg-[var(--slate-100)] text-[var(--muted)]">
-                        <UserRound className="size-4" aria-hidden />
-                      </span>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold">{log.title}</p>
-                      <p className="text-xs text-[var(--muted)]">
-                        {author?.full_name || "Guardia"} ·{" "}
-                        {formatDateTime(log.created_at)}
-                      </p>
-                      <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--slate-700)]">
-                        {log.description}
-                      </p>
-                      {log.evidence_url && log.evidence_signed && (
-                        <a
-                          href={log.evidence_signed}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-3 block overflow-hidden rounded-xl border border-[var(--border)]"
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={log.evidence_signed}
-                            alt="Evidencia"
-                            className="max-h-56 w-full object-cover"
-                          />
-                          <span className="flex items-center gap-1.5 px-3 py-2 text-xs text-[var(--muted)]">
-                            <ImageIcon className="size-3.5" aria-hidden />
-                            Ver evidencia
-                          </span>
-                        </a>
+                    <div className="flex items-start gap-3">
+                      {author?.avatar_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={author.avatar_url}
+                          alt=""
+                          className="size-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="flex size-10 items-center justify-center rounded-full bg-[var(--slate-100)] text-[var(--muted)]">
+                          <UserRound className="size-4" aria-hidden />
+                        </span>
                       )}
-                      {log.evidence_url && !log.evidence_signed && (
-                        <p className="mt-3 text-xs text-[var(--muted)]">
-                          Evidencia no disponible
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold">{log.title}</p>
+                        <p className="text-xs text-[var(--muted)]">
+                          {author?.full_name || "Guardia"} ·{" "}
+                          {formatDateTime(log.created_at)}
+                          {log.author_guard_id === user.id ? " · Tú" : ""}
                         </p>
-                      )}
+                        <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--slate-700)]">
+                          {log.description}
+                        </p>
+                        {log.evidence_url && log.evidence_signed && (
+                          <a
+                            href={log.evidence_signed}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 block overflow-hidden rounded-xl border border-[var(--border)]"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={log.evidence_signed}
+                              alt="Evidencia"
+                              className="max-h-56 w-full object-cover"
+                            />
+                            <span className="flex items-center gap-1.5 px-3 py-2 text-xs text-[var(--muted)]">
+                              <ImageIcon className="size-3.5" aria-hidden />
+                              Ver evidencia
+                            </span>
+                          </a>
+                        )}
+                        {log.evidence_url && !log.evidence_signed && (
+                          <p className="mt-3 text-xs text-[var(--muted)]">
+                            Evidencia no disponible
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
                   </GlassCard>
                 </li>
               );

@@ -39,8 +39,9 @@ export function LogbookForm({ hasActiveShift }: LogbookFormProps) {
 
       {!hasActiveShift && (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">
-          No tienes un turno activo asignado. Igual puedes dejar la nota; el
-          admin puede asignarte Día/Noche en Configuración → Seguridad.
+          No tienes turno activo. Puedes publicar igual; conviene marcar
+          entrada arriba (o pedir al admin que te asigne Día/Noche) para
+          vincular la novedad a tu relevo.
         </p>
       )}
 

@@ -1,15 +1,30 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Package, QrCode, FolderKanban, MessageSquareWarning, Vote, Wallet } from "lucide-react";
+import {
+  Package,
+  QrCode,
+  FolderKanban,
+  MessageSquareWarning,
+  Vote,
+  Wallet,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getTrashReminder } from "@/lib/community";
 import { getDashboardBackgrounds } from "@/lib/dashboard-backgrounds";
+import {
+  isPollOpen,
+  PROJECT_STATUS_LABELS,
+  type ProjectStatus,
+} from "@/lib/projects-voting";
 import { PanicButton } from "@/components/resident/panic-button";
 import {
   ResidentSecurityTeamCard,
   type SecurityTeamPreviewGuard,
 } from "@/components/resident/resident-security-team-card";
-import { TrashReminderBanner } from "@/components/resident/trash-reminder-banner";
+import {
+  ResidentSummaryPanel,
+  type ResidentSummaryItem,
+} from "@/components/resident/resident-summary-panel";
 import {
   BackgroundPanel,
   GlassCard,
@@ -79,13 +94,170 @@ export default async function ResidentDashboardPage() {
     complex.trash_time,
   );
 
-  const { data: activeShifts } = await supabase
-    .from("guard_shifts")
-    .select("id, shift_type, guard_id")
-    .eq("complex_id", profile.complex_id)
-    .eq("status", "ACTIVE")
-    .order("started_at", { ascending: true })
-    .limit(6);
+  const [
+    { data: activeShifts },
+    { data: pollRows },
+    { data: projectRows },
+    { data: myTickets },
+  ] = await Promise.all([
+    supabase
+      .from("guard_shifts")
+      .select("id, shift_type, guard_id")
+      .eq("complex_id", profile.complex_id)
+      .eq("status", "ACTIVE")
+      .order("started_at", { ascending: true })
+      .limit(6),
+    supabase
+      .from("polls")
+      .select("id, title, status, starts_at, ends_at")
+      .eq("complex_id", profile.complex_id)
+      .eq("status", "ACTIVE")
+      .order("created_at", { ascending: false })
+      .limit(8),
+    supabase
+      .from("complex_projects")
+      .select("id, title, status")
+      .eq("complex_id", profile.complex_id)
+      .in("status", ["PROPOSED", "IN_PROGRESS"])
+      .order("updated_at", { ascending: false })
+      .limit(4),
+    supabase
+      .from("maintenance_tickets")
+      .select("id, radicado, title, status, updated_at")
+      .eq("complex_id", profile.complex_id)
+      .eq("created_by", user.id)
+      .in("status", ["OPEN", "IN_PROGRESS", "RESOLVED"])
+      .order("updated_at", { ascending: false })
+      .limit(12),
+  ]);
+
+  const openPolls = (pollRows ?? []).filter((p) => isPollOpen(p));
+  const pollIds = openPolls.map((p) => p.id);
+
+  const { data: myVotes } =
+    pollIds.length > 0 && profile.unit_id
+      ? await supabase
+          .from("poll_votes")
+          .select("poll_id")
+          .eq("unit_id", profile.unit_id)
+          .in("poll_id", pollIds)
+      : { data: [] as { poll_id: string }[] };
+
+  const votedPollIds = new Set((myVotes ?? []).map((v) => v.poll_id));
+
+  const ticketIds = (myTickets ?? []).map((t) => t.id);
+  const { data: ticketUpdates } =
+    ticketIds.length > 0
+      ? await supabase
+          .from("ticket_updates")
+          .select("ticket_id, author_id, created_at")
+          .in("ticket_id", ticketIds)
+          .neq("author_id", user.id)
+          .order("created_at", { ascending: false })
+      : { data: [] as { ticket_id: string; author_id: string; created_at: string }[] };
+
+  const latestReplyByTicket = new Map<string, string>();
+  for (const u of ticketUpdates ?? []) {
+    if (!latestReplyByTicket.has(u.ticket_id)) {
+      latestReplyByTicket.set(u.ticket_id, u.created_at);
+    }
+  }
+
+  const summaryItems: ResidentSummaryItem[] = [];
+
+  if (trashReminder) {
+    summaryItems.push({
+      id: "trash-today",
+      icon: "trash",
+      tone: "brand",
+      title: trashReminder.message,
+      subtitle:
+        complex.trash_notes?.trim() ||
+        "Recuerda sacar las bolsas a tiempo.",
+      badge: "Hoy",
+      badgeVariant: "warning",
+    });
+  }
+
+  if (pendingDeliveries > 0) {
+    summaryItems.push({
+      id: "deliveries-pending",
+      href: "/dashboard/resident/deliveries",
+      icon: "package",
+      tone: "warning",
+      title:
+        pendingDeliveries === 1
+          ? "Tienes un paquete en portería"
+          : `Tienes ${pendingDeliveries} paquetes en portería`,
+      subtitle: "Pasa a reclamarlo con tu documento",
+      badge: String(pendingDeliveries),
+      badgeVariant: "warning",
+    });
+  }
+
+  if (pendingUtilityBills > 0) {
+    summaryItems.push({
+      id: "bills-pending",
+      href: "/dashboard/resident/finances",
+      icon: "wallet",
+      tone: "warning",
+      title:
+        pendingUtilityBills === 1
+          ? "Tienes un recibo pendiente"
+          : `Tienes ${pendingUtilityBills} recibos pendientes`,
+      subtitle: "Revisa cuotas y servicios",
+      badge: String(pendingUtilityBills),
+      badgeVariant: "warning",
+    });
+  }
+
+  for (const poll of openPolls) {
+    const hasVoted = votedPollIds.has(poll.id);
+    summaryItems.push({
+      id: `poll-${poll.id}`,
+      href: "/dashboard/resident/voting",
+      icon: "vote",
+      tone: hasVoted ? "success" : "brand",
+      title: poll.title,
+      subtitle: hasVoted
+        ? "Ya votaste · Ver resultados"
+        : "Votación activa · Tu unidad aún no vota",
+      badge: hasVoted ? "Votado" : "Pendiente",
+      badgeVariant: hasVoted ? "success" : "warning",
+    });
+  }
+
+  for (const project of projectRows ?? []) {
+    const status = project.status as ProjectStatus;
+    summaryItems.push({
+      id: `project-${project.id}`,
+      href: "/dashboard/resident/projects",
+      icon: "project",
+      tone: status === "IN_PROGRESS" ? "warning" : "muted",
+      title: project.title,
+      subtitle: `Proyecto · ${PROJECT_STATUS_LABELS[status] ?? status}`,
+      badge: PROJECT_STATUS_LABELS[status] ?? status,
+      badgeVariant: status === "IN_PROGRESS" ? "warning" : "muted",
+    });
+  }
+
+  for (const ticket of myTickets ?? []) {
+    if (!latestReplyByTicket.has(ticket.id)) continue;
+    // No inundar: máximo 3 PQRS con respuesta en el panel
+    const pqrsShown = summaryItems.filter((i) => i.icon === "pqrs").length;
+    if (pqrsShown >= 3) break;
+
+    summaryItems.push({
+      id: `pqrs-${ticket.id}`,
+      href: `/dashboard/resident/pqrs/${ticket.id}`,
+      icon: "pqrs",
+      tone: "brand",
+      title: ticket.title,
+      subtitle: `Hay una respuesta en ${ticket.radicado}`,
+      badge: "Respuesta",
+      badgeVariant: "default",
+    });
+  }
 
   const guardIds = [...new Set((activeShifts ?? []).map((s) => s.guard_id))];
   const guardNameById = new Map<
@@ -151,13 +323,7 @@ export default async function ResidentDashboardPage() {
         <PanicButton />
       </BackgroundPanel>
 
-      {trashReminder && (
-        <TrashReminderBanner
-          kind={trashReminder.kind!}
-          message={trashReminder.message}
-          notes={complex.trash_notes}
-        />
-      )}
+      <ResidentSummaryPanel items={summaryItems} />
 
       <GlassCard as="section" blur="md">
         <h2 className="text-sm font-semibold text-[var(--slate-700)]">
@@ -191,7 +357,7 @@ export default async function ResidentDashboardPage() {
             </span>
             <span>
               <span className="block text-sm font-semibold text-[var(--foreground)]">
-                Encomiendas pendientes
+                Encomiendas
               </span>
               <span className="block text-xs text-[var(--muted)]">
                 Paquetes en portería

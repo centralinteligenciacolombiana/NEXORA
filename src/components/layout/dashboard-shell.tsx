@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import {
   Building2,
   BookOpen,
+  CalendarDays,
+  Car,
   FileText,
   FolderKanban,
   Home,
@@ -13,10 +15,12 @@ import {
   LogOut,
   MessageSquareWarning,
   Package,
+  PawPrint,
   QrCode,
   Settings,
   Shield,
   Trash2,
+  Truck,
   UserRound,
   UserCheck,
   Vote,
@@ -88,6 +92,21 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       label: "PQRS",
       icon: MessageSquareWarning,
     },
+    {
+      href: "/dashboard/admin/pets",
+      label: "Mascotas",
+      icon: PawPrint,
+    },
+    {
+      href: "/dashboard/admin/amenities",
+      label: "Reservas",
+      icon: CalendarDays,
+    },
+    {
+      href: "/dashboard/admin/moves",
+      label: "Mudanzas",
+      icon: Truck,
+    },
     { href: "/dashboard/security", label: "Portería", icon: Shield },
     { href: "/dashboard/security/deliveries", label: "Paquetes", icon: Package },
   ],
@@ -120,6 +139,26 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       icon: Vote,
     },
     {
+      href: "/dashboard/resident/vehicles",
+      label: "Vehículos",
+      icon: Car,
+    },
+    {
+      href: "/dashboard/resident/pets",
+      label: "Mascotas",
+      icon: PawPrint,
+    },
+    {
+      href: "/dashboard/resident/reservations",
+      label: "Reservas",
+      icon: CalendarDays,
+    },
+    {
+      href: "/dashboard/resident/moves",
+      label: "Mudanzas",
+      icon: Truck,
+    },
+    {
       href: "/dashboard/resident/security-team",
       label: "Vigilancia",
       icon: Shield,
@@ -131,6 +170,11 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
     { href: "/dashboard/security", label: "Portería", icon: Shield, exact: true },
     { href: "/dashboard/security/deliveries", label: "Paquetes", icon: Package },
     {
+      href: "/dashboard/security/vehicles",
+      label: "Placas",
+      icon: Car,
+    },
+    {
       href: "/dashboard/security/utilities",
       label: "Recibos",
       icon: FileText,
@@ -139,6 +183,11 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       href: "/dashboard/security/logbook",
       label: "Bitácora",
       icon: BookOpen,
+    },
+    {
+      href: "/dashboard/security/moves",
+      label: "Mudanzas",
+      icon: Truck,
     },
   ],
 };

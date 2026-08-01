@@ -188,6 +188,98 @@ function revalidatePaths() {
   revalidatePath("/dashboard/security");
 }
 
+/**
+ * Portería marca entrada de turno (DAY/NIGHT) sobre sí misma.
+ * Cierra un ACTIVE previo del mismo guardia si existiera.
+ */
+export async function startOwnShiftAction(
+  shiftType: ShiftType,
+): Promise<ShiftActionState> {
+  const auth = await requireSecurityOps();
+  if (auth.error || !auth.profile || !auth.user) {
+    return { error: auth.error ?? "No autorizado." };
+  }
+
+  if (auth.profile.role !== "SECURITY") {
+    return {
+      error:
+        "Solo personal de seguridad puede marcar su propio turno. Usa asignación admin.",
+    };
+  }
+
+  const complexId = auth.profile.complex_id;
+  const now = new Date().toISOString();
+
+  const { error: finishError } = await auth.supabase
+    .from("guard_shifts")
+    .update({
+      status: "FINISHED",
+      ended_at: now,
+      updated_at: now,
+    })
+    .eq("guard_id", auth.user.id)
+    .eq("status", "ACTIVE");
+
+  if (finishError) {
+    return { error: finishError.message };
+  }
+
+  const { error: insertError } = await auth.supabase.from("guard_shifts").insert({
+    complex_id: complexId,
+    guard_id: auth.user.id,
+    shift_type: shiftType,
+    status: "ACTIVE",
+    started_at: now,
+    ended_at: null,
+  });
+
+  if (insertError) {
+    return { error: insertError.message };
+  }
+
+  revalidatePaths();
+  const label = shiftType === "DAY" ? "Día" : "Noche";
+  return {
+    success: true,
+    message: `Turno de ${label} iniciado. Ya puedes dejar el relevo en bitácora.`,
+  };
+}
+
+/** Portería marca salida y cierra su turno ACTIVE. */
+export async function endOwnShiftAction(): Promise<ShiftActionState> {
+  const auth = await requireSecurityOps();
+  if (auth.error || !auth.profile || !auth.user) {
+    return { error: auth.error ?? "No autorizado." };
+  }
+
+  if (auth.profile.role !== "SECURITY") {
+    return { error: "Solo personal de seguridad puede cerrar su propio turno." };
+  }
+
+  const now = new Date().toISOString();
+  const { data: updated, error } = await auth.supabase
+    .from("guard_shifts")
+    .update({
+      status: "FINISHED",
+      ended_at: now,
+      updated_at: now,
+    })
+    .eq("guard_id", auth.user.id)
+    .eq("status", "ACTIVE")
+    .select("id")
+    .maybeSingle();
+
+  if (error) {
+    return { error: error.message };
+  }
+  if (!updated) {
+    return { error: "No tienes un turno activo para cerrar." };
+  }
+
+  revalidatePaths();
+  return { success: true, message: "Turno finalizado. Buen relevo." };
+}
+
 export async function createShiftLogAction(
   _prev: ShiftActionState,
   formData: FormData,

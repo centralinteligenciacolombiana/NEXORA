@@ -164,6 +164,12 @@ export default async function SecurityDashboardPage() {
             Bitácora de relevos
           </Link>
           <Link
+            href="/dashboard/security/vehicles"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/25 bg-white/15 px-4 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/25"
+          >
+            Verificar placa
+          </Link>
+          <Link
             href="/dashboard/security/deliveries"
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--surface)] px-4 text-sm font-semibold text-slate-900 hover:bg-slate-100"
           >
