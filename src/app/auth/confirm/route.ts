@@ -32,6 +32,12 @@ async function completePendingRegistration(
   }
 
   if (pending.kind === "complex") {
+    // Asegura profiles antes del invite (FK created_by)
+    const { error: ensureError } = await supabase.rpc("ensure_own_profile");
+    if (ensureError) {
+      console.error("[auth/confirm] ensure_own_profile:", ensureError.message);
+    }
+
     const { data, error } = await supabase.rpc("register_complex", {
       p_name: pending.name,
       p_slug: pending.slug,

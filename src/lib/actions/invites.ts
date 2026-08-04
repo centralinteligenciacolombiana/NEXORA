@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { getAppUrl } from "@/lib/app-url";
 import { createClient } from "@/lib/supabase/server";
+import {
+  createAdminClient,
+  hasServiceRole,
+} from "@/lib/supabase/admin";
+import { sendRegistrationDeniedEmail } from "@/lib/email/send";
 
 export type InviteActionState = {
   error?: string;
@@ -211,21 +216,135 @@ export async function approveRegistrationAction(
 
 export async function rejectRegistrationAction(
   userId: string,
+  reason: string,
 ): Promise<ApprovalActionState> {
+  const trimmed = reason.trim();
+  if (trimmed.length < 5) {
+    return { error: "Indica un motivo de al menos 5 caracteres." };
+  }
+
   const supabase = await createClient();
-  const { error } = await supabase.rpc("reject_registration", {
+  const { data, error } = await supabase.rpc("reject_registration", {
     p_user_id: userId,
+    p_reason: trimmed,
   });
 
   if (error) {
     return { error: error.message };
   }
 
+  const payload = data as {
+    success?: boolean;
+    user_id?: string;
+    email?: string;
+    full_name?: string;
+    complex_name?: string;
+    reason?: string;
+  } | null;
+
+  if (!payload?.user_id || !payload.email) {
+    return { error: "No se pudo preparar el rechazo." };
+  }
+
+  // Correo antes de borrar (el Auth ya no existirá)
+  await sendRegistrationDeniedEmail({
+    to: payload.email,
+    userName: payload.full_name || payload.email,
+    complexName: payload.complex_name || "tu conjunto",
+    reason: payload.reason || trimmed,
+  });
+
+  if (!hasServiceRole()) {
+    return {
+      error:
+        "Rechazo registrado, pero falta SUPABASE_SERVICE_ROLE_KEY para borrar la cuenta. Contacta soporte NEXORA.",
+    };
+  }
+
+  const admin = createAdminClient();
+  const { error: deleteError } = await admin.auth.admin.deleteUser(
+    payload.user_id,
+  );
+
+  if (deleteError) {
+    return {
+      error: `Aviso enviado, pero no se pudo borrar la cuenta: ${deleteError.message}`,
+    };
+  }
+
   revalidatePath("/dashboard/admin/approvals");
+  revalidatePath("/dashboard/admin/people");
   revalidatePath("/dashboard/admin");
   revalidatePath("/dashboard/pending-approval");
   return {
     success: true,
-    message: "Registro rechazado. El usuario no tendra acceso al panel.",
+    message:
+      "Registro anulado. Se notificó por correo y se eliminaron sus datos.",
+  };
+}
+
+/** Expulsa a un miembro APPROVED (limpia Auth + notifica). */
+export async function annulMemberAction(
+  userId: string,
+  reason: string,
+): Promise<ApprovalActionState> {
+  const trimmed = reason.trim();
+  if (trimmed.length < 5) {
+    return { error: "Indica un motivo de al menos 5 caracteres." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("annul_member_registration", {
+    p_user_id: userId,
+    p_reason: trimmed,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  const payload = data as {
+    user_id?: string;
+    email?: string;
+    full_name?: string;
+    complex_name?: string;
+    reason?: string;
+  } | null;
+
+  if (!payload?.user_id || !payload.email) {
+    return { error: "No se pudo preparar la anulación." };
+  }
+
+  await sendRegistrationDeniedEmail({
+    to: payload.email,
+    userName: payload.full_name || payload.email,
+    complexName: payload.complex_name || "tu conjunto",
+    reason: payload.reason || trimmed,
+  });
+
+  if (!hasServiceRole()) {
+    return {
+      error:
+        "Anulación registrada, pero falta SUPABASE_SERVICE_ROLE_KEY para borrar la cuenta.",
+    };
+  }
+
+  const admin = createAdminClient();
+  const { error: deleteError } = await admin.auth.admin.deleteUser(
+    payload.user_id,
+  );
+
+  if (deleteError) {
+    return {
+      error: `Aviso enviado, pero no se pudo borrar la cuenta: ${deleteError.message}`,
+    };
+  }
+
+  revalidatePath("/dashboard/admin/people");
+  revalidatePath("/dashboard/admin/approvals");
+  revalidatePath("/dashboard/admin");
+  return {
+    success: true,
+    message: "Miembro anulado. Datos eliminados y correo enviado.",
   };
 }

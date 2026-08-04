@@ -24,6 +24,74 @@ function slugify(value: string): string {
     .slice(0, 60);
 }
 
+/**
+ * Garantiza perfil en public.profiles para el usuario de la sesión actual.
+ * Evita el FK de complex_invites.created_by tras wipes o si falló el trigger.
+ */
+async function ensureSessionProfile(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  extras?: { fullName?: string; phone?: string; email?: string },
+): Promise<{ userId: string } | { error: string }> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return { error: "Sesión no válida. Vuelve a iniciar sesión." };
+  }
+
+  // Preferir RPC (SECURITY DEFINER) si la migración 23 ya está aplicada
+  const { error: rpcError } = await supabase.rpc("ensure_own_profile");
+  if (rpcError) {
+    // Fallback: upsert directo (RLS puede bloquear insert; service role como respaldo)
+    const row = {
+      id: user.id,
+      email: extras?.email ?? user.email ?? null,
+      full_name:
+        extras?.fullName ??
+        (user.user_metadata?.full_name as string | undefined) ??
+        user.email ??
+        null,
+      phone: extras?.phone ?? null,
+      role: "RESIDENT" as const,
+      is_active: true,
+      registration_status: "APPROVED",
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error: upsertError } = await supabase.from("profiles").upsert(row, {
+      onConflict: "id",
+    });
+
+    if (upsertError && hasServiceRole()) {
+      const admin = createAdminClient();
+      const { error: adminUpsertError } = await admin
+        .from("profiles")
+        .upsert(row, { onConflict: "id" });
+      if (adminUpsertError) {
+        return {
+          error: `No se pudo crear el perfil: ${adminUpsertError.message}`,
+        };
+      }
+    } else if (upsertError) {
+      return { error: `No se pudo crear el perfil: ${upsertError.message}` };
+    }
+  } else if (extras?.fullName || extras?.phone || extras?.email) {
+    await supabase
+      .from("profiles")
+      .update({
+        ...(extras.fullName ? { full_name: extras.fullName } : {}),
+        ...(extras.phone ? { phone: extras.phone } : {}),
+        ...(extras.email ? { email: extras.email } : {}),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id);
+  }
+
+  return { userId: user.id };
+}
+
 export async function loginAction(
   _prev: AuthActionState,
   formData: FormData,
@@ -81,6 +149,22 @@ export async function loginAction(
   }
 
   if (error) {
+    // Cuenta borrada tras rechazo: explicar motivo guardado
+    const { data: denial } = await supabase.rpc("get_registration_denial", {
+      p_email: email.toLowerCase(),
+    });
+    const denialPayload = denial as {
+      found?: boolean;
+      complex_name?: string;
+      reason?: string;
+    } | null;
+
+    if (denialPayload?.found && denialPayload.reason) {
+      return {
+        error: `Tu registro en ${denialPayload.complex_name ?? "el conjunto"} fue anulado. Motivo: ${denialPayload.reason}. Debes solicitar una nueva invitación y registrarte otra vez.`,
+      };
+    }
+
     return { error: "Credenciales incorrectas. Intenta de nuevo." };
   }
 
@@ -188,6 +272,15 @@ export async function registerComplexAction(
         };
       }
 
+      const ensured = await ensureSessionProfile(supabase, {
+        fullName,
+        phone,
+        email,
+      });
+      if ("error" in ensured) {
+        return { error: ensured.error };
+      }
+
       const { data, error } = await supabase.rpc("register_complex", {
         p_name: complexName,
         p_slug: slug,
@@ -202,22 +295,16 @@ export async function registerComplexAction(
         return { error: error.message };
       }
 
-      const {
-        data: { user: signedUser },
-      } = await supabase.auth.getUser();
-
-      if (signedUser) {
-        await supabase
-          .from("profiles")
-          .update({
-            full_name: fullName,
-            phone: phone || null,
-            email,
-            email_confirmed_at: null,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", signedUser.id);
-      }
+      await supabase
+        .from("profiles")
+        .update({
+          full_name: fullName,
+          phone: phone || null,
+          email,
+          email_confirmed_at: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", ensured.userId);
 
       const inviteToken =
         data && typeof data === "object" && "invite" in data
@@ -276,6 +363,15 @@ export async function registerComplexAction(
     };
   }
 
+  const ensured = await ensureSessionProfile(supabase, {
+    fullName,
+    phone,
+    email,
+  });
+  if ("error" in ensured) {
+    return { error: ensured.error };
+  }
+
   const { data, error } = await supabase.rpc("register_complex", {
     p_name: complexName,
     p_slug: slug,
@@ -323,6 +419,24 @@ export async function registerWithInviteAction(
     occupancyRaw === "TEMPORARY"
       ? occupancyRaw
       : undefined;
+
+  const preferredShiftRaw = String(formData.get("preferredShift") ?? "")
+    .trim()
+    .toUpperCase();
+  const preferredShift =
+    preferredShiftRaw === "DAY" || preferredShiftRaw === "NIGHT"
+      ? preferredShiftRaw
+      : null;
+  const securityPostRaw = String(formData.get("securityPost") ?? "")
+    .trim()
+    .toUpperCase();
+  const securityPost =
+    securityPostRaw === "LOBBY" ||
+    securityPostRaw === "PATROL" ||
+    securityPostRaw === "MIXED"
+      ? securityPostRaw
+      : null;
+  const securityNotes = String(formData.get("securityNotes") ?? "").trim();
 
   if (!token) {
     return { error: "Falta el enlace de invitación." };
@@ -504,6 +618,13 @@ export async function registerWithInviteAction(
           email,
           // Soft confirm en perfil; Auth ya permite entrar
           email_confirmed_at: null,
+          ...(inviteRole === "SECURITY"
+            ? {
+                preferred_shift_type: preferredShift,
+                security_post: securityPost,
+                security_notes: securityNotes || null,
+              }
+            : {}),
           updated_at: new Date().toISOString(),
         })
         .eq("id", signedUser.id);
@@ -543,11 +664,16 @@ export async function completeComplexRegistrationAction(
   }
 
   const supabase = await createClient();
+  const ensured = await ensureSessionProfile(supabase);
+  if ("error" in ensured) {
+    return { error: ensured.error };
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!user || user.id !== ensured.userId) {
     return { error: "Debes iniciar sesión." };
   }
 

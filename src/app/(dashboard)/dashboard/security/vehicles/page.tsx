@@ -32,7 +32,7 @@ export default async function SecurityVehiclesPage() {
         className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand)] hover:underline"
       >
         <ArrowLeft className="size-4" aria-hidden />
-        Volver a portería
+        Volver a seguridad
       </Link>
 
       <div className="flex items-start gap-3">

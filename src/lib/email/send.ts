@@ -13,6 +13,7 @@ import { UtilityBillEmail } from "@/lib/email/templates/UtilityBillEmail";
 import { AdminFeeReminderEmail } from "@/lib/email/templates/AdminFeeReminderEmail";
 import { TicketCreatedEmail } from "@/lib/email/templates/TicketCreatedEmail";
 import { TicketUpdatedEmail } from "@/lib/email/templates/TicketUpdatedEmail";
+import { RegistrationDeniedEmail } from "@/lib/email/templates/RegistrationDeniedEmail";
 
 export interface SendInviteEmailParams {
   to: string;
@@ -30,7 +31,7 @@ export interface SendInviteEmailResult {
 }
 
 /**
- * Envía el correo transaccional de invitación / confirmación vía Resend.
+ * Env�a el correo transaccional de invitaci�n / confirmaci�n v�a Resend.
  */
 export async function sendInviteEmail(
   params: SendInviteEmailParams,
@@ -38,20 +39,20 @@ export async function sendInviteEmail(
   const { to, userName, complexName, role, inviteUrl, supportEmail } = params;
 
   if (!process.env.RESEND_API_KEY) {
-    console.error("[email] RESEND_API_KEY no está configurada");
+    console.error("[email] RESEND_API_KEY no est� configurada");
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
 
   if (!to || !inviteUrl) {
     console.error("[email] Faltan destinatario o inviteUrl");
-    return { success: false, error: "Parámetros incompletos" };
+    return { success: false, error: "Par�metros incompletos" };
   }
 
   try {
     const resend = getResendClient();
     const from = getResendFromEmail();
 
-    console.info("[email] Enviando invitación", {
+    console.info("[email] Enviando invitaci�n", {
       to,
       complexName,
       role,
@@ -60,7 +61,7 @@ export async function sendInviteEmail(
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Únete a ${complexName} en NEXORA`,
+      subject: `�nete a ${complexName} en NEXORA`,
       react: React.createElement(InviteEmail, {
         userName,
         complexName,
@@ -75,12 +76,12 @@ export async function sendInviteEmail(
       return { success: false, error: error.message };
     }
 
-    console.info("[email] Invitación enviada", { id: data?.id, to });
+    console.info("[email] Invitaci�n enviada", { id: data?.id, to });
     return { success: true, id: data?.id };
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "Error desconocido al enviar correo";
-    console.error("[email] Excepción:", message);
+    console.error("[email] Excepci�n:", message);
     return { success: false, error: message };
   }
 }
@@ -96,7 +97,7 @@ export interface SendPackageNotificationParams {
 }
 
 /**
- * Notifica al residente que tiene una encomienda en portería.
+ * Notifica al residente que tiene una encomienda en porter�a.
  */
 export async function sendPackageNotificationEmail(
   params: SendPackageNotificationParams,
@@ -112,13 +113,13 @@ export async function sendPackageNotificationEmail(
   } = params;
 
   if (!process.env.RESEND_API_KEY) {
-    console.error("[email] RESEND_API_KEY no está configurada");
+    console.error("[email] RESEND_API_KEY no est� configurada");
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
 
   if (!to) {
-    console.error("[email] Falta destinatario para notificación de paquete");
-    return { success: false, error: "Parámetros incompletos" };
+    console.error("[email] Falta destinatario para notificaci�n de paquete");
+    return { success: false, error: "Par�metros incompletos" };
   }
 
   const receivedLabel = new Intl.DateTimeFormat("es-CO", {
@@ -141,7 +142,7 @@ export async function sendPackageNotificationEmail(
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Nueva encomienda en portería — ${complexName}`,
+      subject: `Nueva encomienda en porter�a ? ${complexName}`,
       react: React.createElement(PackageNotificationEmail, {
         userName,
         complexName,
@@ -158,7 +159,7 @@ export async function sendPackageNotificationEmail(
       return { success: false, error: error.message };
     }
 
-    console.info("[email] Notificación de encomienda enviada", {
+    console.info("[email] Notificaci�n de encomienda enviada", {
       id: data?.id,
       to,
     });
@@ -166,7 +167,7 @@ export async function sendPackageNotificationEmail(
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "Error desconocido al enviar correo";
-    console.error("[email] Excepción (paquete):", message);
+    console.error("[email] Excepci�n (paquete):", message);
     return { success: false, error: message };
   }
 }
@@ -191,7 +192,7 @@ export async function sendUtilityBillEmail(
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
   if (!to) {
-    return { success: false, error: "Parámetros incompletos" };
+    return { success: false, error: "Par�metros incompletos" };
   }
 
   try {
@@ -202,7 +203,7 @@ export async function sendUtilityBillEmail(
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Recibo de ${serviceLabel} en portería — ${complexName}`,
+      subject: `Recibo de ${serviceLabel} en porter�a ? ${complexName}`,
       react: React.createElement(UtilityBillEmail, {
         userName,
         complexName,
@@ -256,7 +257,7 @@ export async function sendAdminFeeReminderEmail(
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
   if (!to) {
-    return { success: false, error: "Parámetros incompletos" };
+    return { success: false, error: "Par�metros incompletos" };
   }
 
   try {
@@ -267,7 +268,7 @@ export async function sendAdminFeeReminderEmail(
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Recordatorio cuota ${periodName} — ${complexName}`,
+      subject: `Recordatorio cuota ${periodName} ? ${complexName}`,
       react: React.createElement(AdminFeeReminderEmail, {
         userName,
         complexName,
@@ -311,7 +312,7 @@ export async function sendTicketCreatedEmail(
   if (!process.env.RESEND_API_KEY) {
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
-  if (!to) return { success: false, error: "Parámetros incompletos" };
+  if (!to) return { success: false, error: "Par�metros incompletos" };
 
   try {
     const resend = getResendClient();
@@ -321,7 +322,7 @@ export async function sendTicketCreatedEmail(
     const { data, error } = await resend.emails.send({
       from,
       to,
-      subject: `Radicado ${radicado} — solicitud recibida`,
+      subject: `Radicado ${radicado} ? solicitud recibida`,
       react: React.createElement(TicketCreatedEmail, {
         userName,
         complexName,
@@ -371,7 +372,7 @@ export async function sendTicketUpdatedEmail(
   if (!process.env.RESEND_API_KEY) {
     return { success: false, error: "RESEND_API_KEY no configurada" };
   }
-  if (!to) return { success: false, error: "Parámetros incompletos" };
+  if (!to) return { success: false, error: "Par�metros incompletos" };
 
   try {
     const resend = getResendClient();
@@ -382,8 +383,8 @@ export async function sendTicketUpdatedEmail(
       from,
       to,
       subject: resolved
-        ? `Solución ${radicado} — ${title}`
-        : `Actualización ${radicado}: ${statusLabel}`,
+        ? `Soluci�n ${radicado} ? ${title}`
+        : `Actualizaci�n ${radicado}: ${statusLabel}`,
       react: React.createElement(TicketUpdatedEmail, {
         userName,
         complexName,
@@ -401,6 +402,59 @@ export async function sendTicketUpdatedEmail(
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "Error desconocido al enviar correo";
+    return { success: false, error: message };
+  }
+}
+
+export interface SendRegistrationDeniedParams {
+  to: string;
+  userName: string;
+  complexName: string;
+  reason: string;
+  supportEmail?: string;
+}
+
+/** Notifica rechazo/anulaci�n de registro (cuenta eliminada). */
+export async function sendRegistrationDeniedEmail(
+  params: SendRegistrationDeniedParams,
+): Promise<SendInviteEmailResult> {
+  const { to, userName, complexName, reason, supportEmail } = params;
+
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[email] RESEND_API_KEY no est� configurada");
+    return { success: false, error: "RESEND_API_KEY no configurada" };
+  }
+
+  if (!to || !reason.trim()) {
+    return { success: false, error: "Par�metros incompletos" };
+  }
+
+  try {
+    const resend = getResendClient();
+    const from = getResendFromEmail();
+
+    const { data, error } = await resend.emails.send({
+      from,
+      to,
+      subject: `Registro anulado ? ${complexName}`,
+      react: React.createElement(RegistrationDeniedEmail, {
+        userName,
+        complexName,
+        reason,
+        supportEmail,
+      }),
+    });
+
+    if (error) {
+      console.error("[email] Error rechazo:", error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "Error desconocido al enviar correo";
+    console.error("[email] Excepci�n rechazo:", message);
     return { success: false, error: message };
   }
 }

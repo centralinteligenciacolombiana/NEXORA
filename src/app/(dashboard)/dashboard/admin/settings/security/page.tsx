@@ -7,6 +7,7 @@ import {
   type SecurityGuardRow,
 } from "@/components/admin/admin-security-settings-client";
 import type { ShiftType } from "@/lib/actions/shifts";
+import type { SecurityPost } from "@/lib/security";
 
 export default async function AdminSecuritySettingsPage() {
   const supabase = await createClient();
@@ -35,7 +36,9 @@ export default async function AdminSecuritySettingsPage() {
         .single(),
       supabase
         .from("profiles")
-        .select("id, full_name, email, avatar_url")
+        .select(
+          "id, full_name, email, avatar_url, preferred_shift_type, security_post, security_notes",
+        )
         .eq("complex_id", profile.complex_id)
         .eq("role", "SECURITY")
         .eq("is_active", true)
@@ -60,6 +63,9 @@ export default async function AdminSecuritySettingsPage() {
     full_name: g.full_name,
     email: g.email,
     avatar_url: g.avatar_url,
+    preferredShiftType: (g.preferred_shift_type as ShiftType | null) ?? null,
+    securityPost: (g.security_post as SecurityPost | null) ?? null,
+    securityNotes: g.security_notes,
     activeShiftType: shiftByGuard.get(g.id) ?? null,
   }));
 
@@ -78,13 +84,21 @@ export default async function AdminSecuritySettingsPage() {
             Activa la bitácora de relevos y asigna turnos Día / Noche.
           </p>
         </div>
-        <Link
-          href="/dashboard/admin/settings"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand)] hover:underline"
-        >
-          <ArrowLeft className="size-4" aria-hidden />
-          Configuración
-        </Link>
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <Link
+            href="/dashboard/admin/security-reports"
+            className="text-sm font-medium text-[var(--brand)] hover:underline"
+          >
+            Reportes de cierre
+          </Link>
+          <Link
+            href="/dashboard/admin/settings"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand)] hover:underline"
+          >
+            <ArrowLeft className="size-4" aria-hidden />
+            Configuración
+          </Link>
+        </div>
       </div>
 
       <AdminSecuritySettingsClient

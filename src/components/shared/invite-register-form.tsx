@@ -146,11 +146,38 @@ export function InviteRegisterForm({
       {!requireUnit && (
         <p className="rounded-lg bg-[var(--background)] px-3 py-2 text-xs text-[var(--muted)]">
           {role === "SECURITY"
-            ? "Te registrarás como seguridad / portería. Tras la confirmación del administrador entrarás al panel de vigilancia."
+            ? "Te registrarás como seguridad. Tras la confirmación del administrador entrarás al panel de vigilancia."
             : role === "STAFF"
               ? "Te registrarás como personal de mantenimiento. Tras la confirmación del administrador entrarás al panel de staff."
               : "Completa tus datos para unirte al conjunto."}
         </p>
+      )}
+
+      {role === "SECURITY" && (
+        <div className="space-y-3 rounded-xl border border-[var(--border)] bg-[var(--background)] p-3">
+          <p className="text-sm font-semibold">Datos de turno (opcionales)</p>
+          <p className="-mt-1 text-xs text-[var(--muted)]">
+            Puedes indicar tu horario habitual. Luego lo confirmarás al marcar
+            entrada de turno.
+          </p>
+          <Select name="preferredShift" label="Turno habitual" defaultValue="">
+            <option value="">Sin indicar</option>
+            <option value="DAY">Día</option>
+            <option value="NIGHT">Noche</option>
+          </Select>
+          <Select name="securityPost" label="Puesto habitual" defaultValue="">
+            <option value="">Sin indicar</option>
+            <option value="LOBBY">Lobby / recepción</option>
+            <option value="PATROL">Patrullaje</option>
+            <option value="MIXED">Mixto</option>
+          </Select>
+          <Input
+            name="securityNotes"
+            label="Horario u observaciones"
+            placeholder="Ej. Lun–Vie 6:00–18:00, relevo en lobby"
+            maxLength={200}
+          />
+        </div>
       )}
 
       <Input

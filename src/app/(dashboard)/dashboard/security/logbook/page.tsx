@@ -17,6 +17,8 @@ import { ShiftClockControls } from "@/components/security/shift-clock-controls";
 import { GlassCard } from "@/components/ui/background-panel";
 import { Badge } from "@/components/ui/badge";
 import { formatDateTime } from "@/lib/utils";
+import type { SecurityPost } from "@/lib/security";
+import { SECURITY_POST_LABELS } from "@/lib/security";
 import type { ShiftType } from "@/lib/actions/shifts";
 
 type LogRow = {
@@ -39,7 +41,7 @@ export default async function SecurityLogbookPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, role, complex_id")
+    .select("id, role, complex_id, security_post")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -66,7 +68,7 @@ export default async function SecurityLogbookPage() {
           className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand)] hover:underline"
         >
           <ArrowLeft className="size-4" aria-hidden />
-          Volver a portería
+          Volver a seguridad
         </Link>
         <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-12 text-center">
           <Lock className="mx-auto size-8 text-[var(--muted)]" aria-hidden />
@@ -88,7 +90,7 @@ export default async function SecurityLogbookPage() {
   const [{ data: myShift }, { data: logs }] = await Promise.all([
     supabase
       .from("guard_shifts")
-      .select("id, shift_type, started_at")
+      .select("id, shift_type, started_at, post_assignment")
       .eq("guard_id", user.id)
       .eq("status", "ACTIVE")
       .maybeSingle(),
@@ -140,6 +142,10 @@ export default async function SecurityLogbookPage() {
     logsWithEvidence.find((l) => l.author_guard_id !== user.id) ?? null;
 
   const activeShiftType = (myShift?.shift_type as ShiftType | undefined) ?? null;
+  const activePost =
+    (myShift?.post_assignment as SecurityPost | null | undefined) ?? null;
+  const preferredPost =
+    (profile.security_post as SecurityPost | null | undefined) ?? null;
 
   return (
     <div className="mx-auto max-w-lg space-y-5 sm:max-w-2xl">
@@ -148,7 +154,7 @@ export default async function SecurityLogbookPage() {
         className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--brand)] hover:underline"
       >
         <ArrowLeft className="size-4" aria-hidden />
-        Volver a portería
+        Volver a seguridad
       </Link>
 
       <div className="flex items-start gap-3">
@@ -163,7 +169,7 @@ export default async function SecurityLogbookPage() {
             Novedades de los últimos 7 días · {complex.name}
           </p>
           {myShift && (
-            <div className="mt-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {myShift.shift_type === "DAY" ? (
                 <Badge variant="warning">
                   <Sun className="mr-1 size-3" aria-hidden />
@@ -175,6 +181,11 @@ export default async function SecurityLogbookPage() {
                   Tu turno: Noche · desde {formatDateTime(myShift.started_at)}
                 </Badge>
               )}
+              {activePost ? (
+                <Badge variant="default">
+                  {SECURITY_POST_LABELS[activePost]}
+                </Badge>
+              ) : null}
             </div>
           )}
         </div>
@@ -182,6 +193,8 @@ export default async function SecurityLogbookPage() {
 
       <ShiftClockControls
         activeShiftType={activeShiftType}
+        activePost={activePost}
+        preferredPost={preferredPost}
         canSelfManage={profile.role === "SECURITY"}
       />
 

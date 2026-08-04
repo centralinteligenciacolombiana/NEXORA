@@ -5,6 +5,7 @@ import {
   MessageSquareWarning,
   Settings,
   UserCheck,
+  Users,
   Vote,
   Wallet,
 } from "lucide-react";
@@ -43,6 +44,13 @@ export default async function AdminDashboardPage() {
     .single();
 
   const tiles = [
+    {
+      href: "/dashboard/admin/people",
+      icon: Users,
+      title: "Personas del conjunto",
+      description:
+        "Residentes, seguridad, mantenimiento y quién está de turno ahora.",
+    },
     {
       href: "/dashboard/admin/approvals",
       icon: UserCheck,

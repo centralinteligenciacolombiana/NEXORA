@@ -7,6 +7,7 @@ import {
   BookOpen,
   CalendarDays,
   Car,
+  ClipboardList,
   FileText,
   FolderKanban,
   Home,
@@ -23,6 +24,7 @@ import {
   Truck,
   UserRound,
   UserCheck,
+  Users,
   Vote,
   Wallet,
 } from "lucide-react";
@@ -56,6 +58,11 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       label: "Confirmar altas",
       icon: UserCheck,
     },
+    {
+      href: "/dashboard/admin/people",
+      label: "Personas",
+      icon: Users,
+    },
     { href: "/dashboard/admin/invites", label: "Invitaciones", icon: Link2 },
     {
       href: "/dashboard/admin/settings",
@@ -66,6 +73,11 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       href: "/dashboard/admin/settings/security",
       label: "Turnos",
       icon: BookOpen,
+    },
+    {
+      href: "/dashboard/admin/security-reports",
+      label: "Reportes turno",
+      icon: ClipboardList,
     },
     {
       href: "/dashboard/admin/settings/community",
@@ -107,7 +119,7 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
       label: "Mudanzas",
       icon: Truck,
     },
-    { href: "/dashboard/security", label: "Portería", icon: Shield },
+    { href: "/dashboard/security", label: "Seguridad", icon: Shield },
     { href: "/dashboard/security/deliveries", label: "Paquetes", icon: Package },
   ],
   RESIDENT: [
@@ -160,14 +172,14 @@ const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
     },
     {
       href: "/dashboard/resident/security-team",
-      label: "Vigilancia",
+      label: "Seguridad",
       icon: Shield,
     },
     { href: "/dashboard/resident/profile", label: "Perfil", icon: UserRound },
   ],
   STAFF: [{ href: "/dashboard/staff", label: "Inicio", icon: Building2, exact: true }],
   SECURITY: [
-    { href: "/dashboard/security", label: "Portería", icon: Shield, exact: true },
+    { href: "/dashboard/security", label: "Seguridad", icon: Shield, exact: true },
     { href: "/dashboard/security/deliveries", label: "Paquetes", icon: Package },
     {
       href: "/dashboard/security/vehicles",
@@ -222,7 +234,7 @@ const RESIDENT_TABS = [
 const SECURITY_TABS = [
   {
     href: "/dashboard/security",
-    label: "Portería",
+    label: "Seguridad",
     icon: Shield,
     exact: true,
   },

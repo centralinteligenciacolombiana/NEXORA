@@ -17,10 +17,8 @@ import {
   type ProjectStatus,
 } from "@/lib/projects-voting";
 import { PanicButton } from "@/components/resident/panic-button";
-import {
-  ResidentSecurityTeamCard,
-  type SecurityTeamPreviewGuard,
-} from "@/components/resident/resident-security-team-card";
+import { OnDutySecurityLive } from "@/components/shared/on-duty-security-live";
+import { fetchOnDutyGuards } from "@/lib/on-duty-security";
 import {
   ResidentSummaryPanel,
   type ResidentSummaryItem,
@@ -95,18 +93,12 @@ export default async function ResidentDashboardPage() {
   );
 
   const [
-    { data: activeShifts },
+    onDutyGuards,
     { data: pollRows },
     { data: projectRows },
     { data: myTickets },
   ] = await Promise.all([
-    supabase
-      .from("guard_shifts")
-      .select("id, shift_type, guard_id")
-      .eq("complex_id", profile.complex_id)
-      .eq("status", "ACTIVE")
-      .order("started_at", { ascending: true })
-      .limit(6),
+    fetchOnDutyGuards(supabase, profile.complex_id),
     supabase
       .from("polls")
       .select("id, title, status, starts_at, ends_at")
@@ -259,36 +251,6 @@ export default async function ResidentDashboardPage() {
     });
   }
 
-  const guardIds = [...new Set((activeShifts ?? []).map((s) => s.guard_id))];
-  const guardNameById = new Map<
-    string,
-    { full_name: string | null; avatar_url: string | null }
-  >();
-  if (guardIds.length > 0) {
-    const { data: guards } = await supabase
-      .from("profiles")
-      .select("id, full_name, avatar_url")
-      .in("id", guardIds);
-    for (const g of guards ?? []) {
-      guardNameById.set(g.id, {
-        full_name: g.full_name,
-        avatar_url: g.avatar_url,
-      });
-    }
-  }
-
-  const securityGuards: SecurityTeamPreviewGuard[] = (activeShifts ?? []).map(
-    (s) => {
-      const g = guardNameById.get(s.guard_id);
-      return {
-        id: s.id,
-        fullName: g?.full_name?.trim() || "Personal de seguridad",
-        avatarUrl: g?.avatar_url ?? null,
-        shiftType: s.shift_type as "DAY" | "NIGHT",
-      };
-    },
-  );
-
   const firstName =
     profile.full_name?.trim().split(/\s+/)[0] ||
     user.email?.split("@")[0] ||
@@ -422,7 +384,23 @@ export default async function ResidentDashboardPage() {
         </div>
       </GlassCard>
 
-      <ResidentSecurityTeamCard guards={securityGuards} />
+      <div className="space-y-2">
+        <OnDutySecurityLive
+          complexId={profile.complex_id}
+          initialGuards={onDutyGuards}
+          title="Seguridad en turno ahora"
+          emptyMessage="No hay turnos activos ahora. Revisa más tarde."
+          compact
+        />
+        <p className="text-right">
+          <Link
+            href="/dashboard/resident/security-team"
+            className="text-xs font-medium text-[var(--brand)] hover:underline"
+          >
+            Ver detalle →
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -8,6 +8,11 @@ import {
   setEnableShiftLogbookAction,
   type ShiftType,
 } from "@/lib/actions/shifts";
+import {
+  SECURITY_POST_LABELS,
+  SHIFT_TYPE_LABELS,
+  type SecurityPost,
+} from "@/lib/security";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +23,9 @@ export type SecurityGuardRow = {
   full_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  preferredShiftType: ShiftType | null;
+  securityPost: SecurityPost | null;
+  securityNotes: string | null;
   activeShiftType: ShiftType | null;
 };
 
@@ -82,7 +90,7 @@ export function AdminSecuritySettingsClient({
           onCheckedChange={onToggle}
           disabled={pending}
           label="Bitácora digital de relevos"
-          description="Permite a portería registrar novedades y fotos al entregar el turno."
+          description="Permite a seguridad registrar novedades y fotos al entregar el turno."
         />
       </section>
 
@@ -126,6 +134,27 @@ export function AdminSecuritySettingsClient({
                     <p className="truncate text-xs text-[var(--muted)]">
                       {g.email}
                     </p>
+                    {(g.preferredShiftType ||
+                      g.securityPost ||
+                      g.securityNotes) && (
+                      <p className="mt-1 text-xs text-[var(--slate-700)]">
+                        {[
+                          g.preferredShiftType
+                            ? `Habitual: ${SHIFT_TYPE_LABELS[g.preferredShiftType]}`
+                            : null,
+                          g.securityPost
+                            ? SECURITY_POST_LABELS[g.securityPost]
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                        {g.securityNotes ? (
+                          <span className="mt-0.5 block text-[var(--muted)]">
+                            {g.securityNotes}
+                          </span>
+                        ) : null}
+                      </p>
+                    )}
                     <div className="mt-1.5">
                       {g.activeShiftType === "DAY" && (
                         <Badge variant="warning">

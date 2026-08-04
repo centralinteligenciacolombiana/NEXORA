@@ -31,7 +31,7 @@ const ROLE_OPTIONS: {
   {
     value: "SECURITY",
     label: "Seguridad",
-    description: "Portería y vigilancia. Van al panel de seguridad.",
+    description: "Vigilancia y acceso. Van al panel de seguridad.",
     defaultLabel: "Registro de seguridad",
     icon: Shield,
   },

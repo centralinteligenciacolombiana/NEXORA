@@ -140,7 +140,7 @@ export default async function SecurityDashboardPage() {
         <div>
           <p className="nexora-text-on-dark flex items-center gap-1.5 text-sm font-medium text-slate-200">
             <Shield className="size-4" aria-hidden />
-            Portería · {complex.name}
+            Seguridad · {complex.name}
           </p>
           <h1 className="nexora-text-on-dark font-display text-2xl font-semibold text-white sm:text-3xl">
             Consola de seguridad
